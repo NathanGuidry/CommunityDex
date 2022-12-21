@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokemon</title>
+</head>
+
+<body>
+    <h1>All Pokemon</h1>
+
+    <ul>
+        <% pokemonNames.forEach((value, index)=> { %>
+            <li>
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= index + 1 %>.png"
+                    alt="">
+                <a href="/pokemon/<%= index + 1 %>">
+                    <%= index +1 %>. <%= pokemonNames[index].name %>
+                </a>
+            </li>
+            <% }) %>
+    </ul>
+</body>
+
+</html>

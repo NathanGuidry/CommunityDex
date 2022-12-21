@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) %>
+    </title>
+</head>
+
+<body>
+    <h1>
+        #<%= id %>
+            <%= pokemon.name %>
+    </h1>
+    <h2>
+        <%= pokemon.types[0].type.name %>
+            <% if(pokemon.types[1]){ %>
+                / <%= pokemon.types[1].type.name %>
+                    <% } %>
+    </h2>
+    <p>
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png" alt="">
+    </p>
+    <p>
+        <%= description %>
+    </p>
+    <a href="/pokemon">Back</a>
+</body>
+
+</html>
