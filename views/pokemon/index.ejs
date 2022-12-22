@@ -11,6 +11,10 @@
 <body>
     <h1>All Pokemon</h1>
 
+    <a href="/">Home</a>
+    <a href="/userPokemon">User-Created Pokemon</a>
+    <a href="/pokemon/new">Create New Pokemon</a>
+
     <ul>
         <% pokemonNames.forEach((value, index)=> { %>
             <li>
@@ -21,6 +25,14 @@
                 </a>
             </li>
             <% }) %>
+
+                <% for(let pokemon of userPokemon) {%>
+                    <li>
+                        <a href="/pokemon/<%= pokemon.pokedexNum %>">
+                            <%= pokemon.pokedexNum %>. <%= pokemon.name %>
+                        </a>
+                    </li>
+                    <% } %>
     </ul>
 </body>
 

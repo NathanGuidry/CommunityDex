@@ -16,10 +16,18 @@
             <%= pokemon.name %>
     </h1>
     <h2>
-        <%= pokemon.types[0].type.name %>
-            <% if(pokemon.types[1]){ %>
-                / <%= pokemon.types[1].type.name %>
-                    <% } %>
+        <% if(id <=numOfBasePokemon){ %>
+            <%= pokemon.types[0].type.name.toUpperCase() %>
+                <% if(pokemon.types[1]){ %>
+                    / <%= pokemon.types[1].type.name.toUpperCase() %>
+                        <% } %>
+                            <% } else { %>
+                                <%= pokemon.type1.toUpperCase() %>
+                                    <% if(pokemon.type2){ %>
+                                        / <%= pokemon.type2.toUpperCase() %>
+                                            <% } %>
+                                                <% } %>
+
     </h2>
     <p>
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png" alt="">
@@ -27,7 +35,20 @@
     <p>
         <%= description %>
     </p>
-    <a href="/pokemon">Back</a>
+
+    <% if (id> numOfBasePokemon) {%>
+        <form action="/pokemon/<%= id %>?_method=DELETE" method="POST">
+            <button>Delete</button>
+        </form>
+
+        <a href="/pokemon/<%= id %>/edit">Edit</a>
+
+        <a href="/userPokemon">Back</a>
+        <% } else {%>
+            <a href="/pokemon">Back</a>
+            <% } %>
+
+
 </body>
 
 </html>

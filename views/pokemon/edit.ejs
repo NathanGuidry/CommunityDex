@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Pokemon</title>
+</head>
+
+<body>
+    <h1>Edit Pokemon</h1>
+
+    <form action="/pokemon/<%= id %>?_method=PATCH" method="POST">
+        <label for="pokedexNum">Pokedex #: </label>
+        <input type="text" placeholder="<%= id %>" value="<%= id %>" name="pokedexNum" id="pokedexNum" readonly>
+
+        <label for="name">Name: </label>
+        <input type="text" value="<%= pokemon.name %>" name="name" id="name">
+
+        <label for="type1" required>Type 1: </label>
+        <select name="type1" id="type1">
+            <option value="normal" <%=pokemon.type1==='normal' ? 'selected' : '' %> >Normal</option>
+            <option value="fire" <%=pokemon.type1==='fire' ? 'selected' : '' %> >Fire</option>
+            <option value="water" <%=pokemon.type1==='water' ? 'selected' : '' %> >Water</option>
+            <option value="electric" <%=pokemon.type1==='electric' ? 'selected' : '' %> >Electric</option>
+            <option value="grass" <%=pokemon.type1==='grass' ? 'selected' : '' %> >Grass</option>
+            <option value="ice" <%=pokemon.type1==='ice' ? 'selected' : '' %> >Ice</option>
+            <option value="fighting" <%=pokemon.type1==='fighting' ? 'selected' : '' %> >Fighting</option>
+            <option value="poison" <%=pokemon.type1==='poison' ? 'selected' : '' %> >Poison</option>
+            <option value="ground" <%=pokemon.type1==='ground' ? 'selected' : '' %> >Ground</option>
+            <option value="flying" <%=pokemon.type1==='flying' ? 'selected' : '' %> >Flying</option>
+            <option value="psychic" <%=pokemon.type1==='psychic' ? 'selected' : '' %> >Psychic</option>
+            <option value="bug" <%=pokemon.type1==='bug' ? 'selected' : '' %> >Bug</option>
+            <option value="rock" <%=pokemon.type1==='rock' ? 'selected' : '' %> >Rock</option>
+            <option value="ghost" <%=pokemon.type1==='ghost' ? 'selected' : '' %> >Ghost</option>
+            <option value="dragon" <%=pokemon.type1==='dragon' ? 'selected' : '' %> >Dragon</option>
+            <option value="dark" <%=pokemon.type1==='dark' ? 'selected' : '' %> >Dark</option>
+            <option value="steel" <%=pokemon.type1==='steel' ? 'selected' : '' %> >Steel</option>
+            <option value="fairy" <%=pokemon.type1==='fairy' ? 'selected' : '' %> >Fairy</option>
+        </select>
+
+        <label for="type2">Type 2: </label>
+        <select name="type2" id="type2">
+            <option></option>
+            <option value="normal" <%=pokemon.type2==='normal' ? 'selected' : '' %> >Normal</option>
+            <option value="fire" <%=pokemon.type2==='fire' ? 'selected' : '' %> >Fire</option>
+            <option value="water" <%=pokemon.type2==='water' ? 'selected' : '' %> >Water</option>
+            <option value="electric" <%=pokemon.type2==='electric' ? 'selected' : '' %> >Electric</option>
+            <option value="grass" <%=pokemon.type2==='grass' ? 'selected' : '' %> >Grass</option>
+            <option value="ice" <%=pokemon.type2==='ice' ? 'selected' : '' %> >Ice</option>
+            <option value="fighting" <%=pokemon.type2==='fighting' ? 'selected' : '' %> >Fighting</option>
+            <option value="poison" <%=pokemon.type2==='poison' ? 'selected' : '' %> >Poison</option>
+            <option value="ground" <%=pokemon.type2==='ground' ? 'selected' : '' %> >Ground</option>
+            <option value="flying" <%=pokemon.type2==='flying' ? 'selected' : '' %> >Flying</option>
+            <option value="psychic" <%=pokemon.type2==='psychic' ? 'selected' : '' %> >Psychic</option>
+            <option value="bug" <%=pokemon.type2==='bug' ? 'selected' : '' %> >Bug</option>
+            <option value="rock" <%=pokemon.type2==='rock' ? 'selected' : '' %> >Rock</option>
+            <option value="ghost" <%=pokemon.type2==='ghost' ? 'selected' : '' %> >Ghost</option>
+            <option value="dragon" <%=pokemon.type2==='dragon' ? 'selected' : '' %> >Dragon</option>
+            <option value="dark" <%=pokemon.type2==='dark' ? 'selected' : '' %> >Dark</option>
+            <option value="steel" <%=pokemon.type2==='steel' ? 'selected' : '' %> >Steel</option>
+            <option value="fairy" <%=pokemon.type2==='fairy' ? 'selected' : '' %> >Fairy</option>
+        </select>
+
+        <label for="description">Description: </label>
+        <textarea name="description" id="description" cols="30" rows="10" required><%= pokemon.description %></textarea>
+
+        <button>Update</button>
+
+    </form>
+
+    <a href="/pokemon/<%= id %>">Cancel</a>
+</body>
+
+</html>
