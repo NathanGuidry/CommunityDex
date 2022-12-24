@@ -1,40 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        <%= pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) %>
-    </title>
-</head>
-
-<body>
-    <h1>
-        #<%= id %>
-            <%= pokemon.name %>
-    </h1>
-    <h2>
-        <% if(id <=numOfBasePokemon){ %>
-            <%= pokemon.types[0].type.name.toUpperCase() %>
-                <% if(pokemon.types[1]){ %>
-                    / <%= pokemon.types[1].type.name.toUpperCase() %>
-                        <% } %>
-                            <% } else { %>
-                                <%= pokemon.type1.toUpperCase() %>
+<%- layout('layouts/boilerplate') %>
+    <div class="inner-bg-image vh-100">
+        <div class="row">
+            <div class="col-5">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png" alt=""
+                    class="entry-image">
+            </div>
+            <div class="col">
+                <h1 class="entry-name">
+                    #<%= id %>
+                        <%= pokemon.name.toUpperCase() %>
+                </h1>
+                <h2 class="entry-types">
+                    <% if(id <=numOfBasePokemon){ %>
+                        <span class="entry-type1">
+                            <%= pokemon.types[0].type.name.toUpperCase() %>
+                        </span>
+                        <% if(pokemon.types[1]){ %>
+                            <span class="entry-type2">
+                                <%= pokemon.types[1].type.name.toUpperCase() %>
+                            </span>
+                            <% } %>
+                                <% } else { %>
+                                    <span class="entry-type1">
+                                        <%= pokemon.type1.toUpperCase() %>
+                                    </span>
                                     <% if(pokemon.type2){ %>
-                                        / <%= pokemon.type2.toUpperCase() %>
+                                        <span class="entry-type2">
+                                            <%= pokemon.type2.toUpperCase() %>
+                                        </span>
+                                        <% } %>
                                             <% } %>
-                                                <% } %>
 
-    </h2>
-    <p>
-        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png" alt="">
-    </p>
-    <p>
-        <%= description %>
-    </p>
+                </h2>
+
+                <h2 class="entry-height">5"3</h2>
+                <h2 class="entry-weight">60 lbs.</h2>
+            </div>
+            <h2 class="entry-description">
+                <%= description %>
+            </h2>
+        </div>
+
+
+    </div>
 
     <% if (id> numOfBasePokemon) {%>
         <form action="/pokemon/<%= id %>?_method=DELETE" method="POST">
@@ -43,12 +51,7 @@
 
         <a href="/pokemon/<%= id %>/edit">Edit</a>
 
-        <a href="/userPokemon">Back</a>
+        <button class="btn btn-light"><a href="/userPokemon">Back</a></button>
         <% } else {%>
-            <a href="/pokemon">Back</a>
+            <button class="btn btn-light"><a href="/pokemon">Back</a></button>
             <% } %>
-
-
-</body>
-
-</html>

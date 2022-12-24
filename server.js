@@ -9,6 +9,7 @@ const __dirname = path.dirname(__filename);
 const mongoose = require('mongoose')
 import { Pokemon } from './models/Pokemon.js'
 const methodOverride = require('method-override')
+const ejsMate = require('ejs-mate')
 const numOfSpecialPokemon = 249
 const numOfBasePokemon = 905
 
@@ -26,11 +27,36 @@ db.once("open", () => {
     console.log("Database connected")
 })
 
+app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
+app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+
+const nameChecker = async function (req, res, next) {
+    const basePokemon = await P.getPokemonsList()
+    const baseNames = basePokemon.results.slice(0, -numOfSpecialPokemon)
+    const { name } = req.body
+    for (let i = 0; i < numOfBasePokemon; i++) {
+        if (name.toLowerCase() === baseNames[i].name) {
+            res.send("A pokemon with that name already exists")
+            return
+        }
+    }
+    next()
+}
+
+const englishDesc = async function (id) {
+    const species = await P.getPokemonSpeciesByName(id)
+    const numOfDescs = species.flavor_text_entries.length
+    for (let i = 0; i < numOfDescs; i++) {
+        if (species.flavor_text_entries[i].language.name === 'en') {
+            return species.flavor_text_entries[i].flavor_text
+        }
+    }
+}
 
 app.get('/', (req, res) => {
     res.render('home')
@@ -60,7 +86,7 @@ app.get('/pokemon', async (req, res) => {
     }
 })
 
-app.post('/pokemon', async (req, res) => {
+app.post('/pokemon', nameChecker, async (req, res) => {
     try {
         const { pokedexNum, name, type1, type2, description } = req.body
         if (type2) {
@@ -69,7 +95,7 @@ app.post('/pokemon', async (req, res) => {
             res.redirect('/userPokemon')
         }
         else {
-            const newPokemon = new Pokemon({ pokedexNum: id, name, type1, description })
+            const newPokemon = new Pokemon({ pokedexNum, name, type1, description })
             await newPokemon.save()
             res.redirect('/userPokemon')
         }
@@ -96,8 +122,7 @@ app.get('/pokemon/:id', async (req, res) => {
         const { id } = req.params
         if (id <= numOfBasePokemon) {
             const pokemon = await P.getPokemonByName(id)
-            const species = await P.getPokemonSpeciesByName(id)
-            const description = species.flavor_text_entries[0].flavor_text
+            const description = await englishDesc(id)
             res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon })
         }
         else {
@@ -143,7 +168,7 @@ app.get('/pokemon/:id/edit', async (req, res) => {
     }
 })
 
-app.patch('/pokemon/:id', async (req, res) => {
+app.patch('/pokemon/:id', nameChecker, async (req, res) => {
     try {
         const { id } = req.params
         let { name, type1, type2, description } = req.body
