@@ -1,78 +1,91 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Pokemon</title>
-</head>
-
-<body>
+<%- layout('layouts/boilerplate') %>
     <h1>Create a New Pokemon</h1>
 
-    <form action="/pokemon" method="POST">
-        <label for="pokedexNum">Pokedex #: </label>
-        <input type="text" placeholder="<%= maxId.pokedexNum + 1 %>" value="<%= maxId.pokedexNum + 1 %>"
-            name="pokedexNum" id="pokedexNum" readonly>
+    <div class="col-6 offset-3">
+        <form action="/pokemon" method="POST" class="validatedForm" novalidate>
+            <div class="mb-3">
+                <label class="form-label" for="pokedexNum">Pokedex #: </label>
+                <input class="form-control" type="text" placeholder="<%= maxId.pokedexNum + 1 %>"
+                    value="<%= maxId.pokedexNum + 1 %>" name="pokedexNum" id="pokedexNum" readonly>
+            </div>
 
-        <label for="name">Name: </label>
-        <input type="text" placeholder="Unique Name Here.." name="name" id="name">
+            <div class="mb-3">
+                <label class="form-label" for="name">Name: </label>
+                <input class="form-control" type="text" placeholder="Unique Name Here.." name="name" id="name" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
 
-        <label for="type1" required>Type 1: </label>
-        <select name="type1" id="type1">
-            <option value="normal">Normal</option>
-            <option value="fire">Fire</option>
-            <option value="water">Water</option>
-            <option value="electric">Electric</option>
-            <option value="grass">Grass</option>
-            <option value="ice">Ice</option>
-            <option value="fighting">Fighting</option>
-            <option value="poison">Poison</option>
-            <option value="ground">Ground</option>
-            <option value="flying">Flying</option>
-            <option value="psychic">Psychic</option>
-            <option value="bug">Bug</option>
-            <option value="rock">Rock</option>
-            <option value="ghost">Ghost</option>
-            <option value="dragon">Dragon</option>
-            <option value="dark">Dark</option>
-            <option value="steel">Steel</option>
-            <option value="fairy">Fairy</option>
-        </select>
+            <div class="mb-3">
+                <label class="form-label" for="type1" required>Type 1: </label>
+                <select class="form-select" name="type1" id="type1">
+                    <option value="normal">Normal</option>
+                    <option value="fire">Fire</option>
+                    <option value="water">Water</option>
+                    <option value="electric">Electric</option>
+                    <option value="grass">Grass</option>
+                    <option value="ice">Ice</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="poison">Poison</option>
+                    <option value="ground">Ground</option>
+                    <option value="flying">Flying</option>
+                    <option value="psychic">Psychic</option>
+                    <option value="bug">Bug</option>
+                    <option value="rock">Rock</option>
+                    <option value="ghost">Ghost</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="dark">Dark</option>
+                    <option value="steel">Steel</option>
+                    <option value="fairy">Fairy</option>
+                </select>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
 
-        <label for="type2">Type 2: </label>
-        <select name="type2" id="type2">
-            <option></option>
-            <option value="normal">Normal</option>
-            <option value="fire">Fire</option>
-            <option value="water">Water</option>
-            <option value="electric">Electric</option>
-            <option value="grass">Grass</option>
-            <option value="ice">Ice</option>
-            <option value="fighting">Fighting</option>
-            <option value="poison">Poison</option>
-            <option value="ground">Ground</option>
-            <option value="flying">Flying</option>
-            <option value="psychic">Psychic</option>
-            <option value="bug">Bug</option>
-            <option value="rock">Rock</option>
-            <option value="ghost">Ghost</option>
-            <option value="dragon">Dragon</option>
-            <option value="dark">Dark</option>
-            <option value="steel">Steel</option>
-            <option value="fairy">Fairy</option>
-        </select>
+            <div class="mb-3">
+                <label class="form-label" for="type2">Type 2: </label>
+                <select class="form-select" name="type2" id="type2">
+                    <option></option>
+                    <option value="normal">Normal</option>
+                    <option value="fire">Fire</option>
+                    <option value="water">Water</option>
+                    <option value="electric">Electric</option>
+                    <option value="grass">Grass</option>
+                    <option value="ice">Ice</option>
+                    <option value="fighting">Fighting</option>
+                    <option value="poison">Poison</option>
+                    <option value="ground">Ground</option>
+                    <option value="flying">Flying</option>
+                    <option value="psychic">Psychic</option>
+                    <option value="bug">Bug</option>
+                    <option value="rock">Rock</option>
+                    <option value="ghost">Ghost</option>
+                    <option value="dragon">Dragon</option>
+                    <option value="dark">Dark</option>
+                    <option value="steel">Steel</option>
+                    <option value="fairy">Fairy</option>
+                </select>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
 
-        <label for="description">Description: </label>
-        <textarea name="description" id="description" cols="30" rows="10" placeholder="Pokemon Flavor Text Here.."
-            required></textarea>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description: </label>
+                <textarea class="form-control" name="description" id="description" cols="30" rows="10"
+                    placeholder="Pokemon Flavor Text Here.." required></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
 
-        <button>Create</button>
+            <div class="mb-3">
+                <button class="btn btn-success">Create</button>
+            </div>
 
-    </form>
+        </form>
+    </div>
 
-    <a href="/pokemon">Cancel</a>
-</body>
-
-</html>
+    <div class="btn btn-light"><a href="/pokemon">Cancel</a></div>
