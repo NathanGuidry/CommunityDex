@@ -33,8 +33,20 @@
 
                 </h2>
 
-                <h2 class="entry-height">5"3</h2>
-                <h2 class="entry-weight">60 lbs.</h2>
+                <h2 class="entry-height">
+                    <% if (id <=numOfBasePokemon){ %>
+                        <%= Math.trunc(pokemon.height / 3.048) %>'
+                            <% } else{ %>
+                                <%= Math.trunc(pokemon.height) %>'
+                                    <% } %>
+                </h2>
+                <h2 class="entry-weight">
+                    <% if (id <=numOfBasePokemon) {%>
+                        <%= Math.trunc(pokemon.weight / 4.536) %> lbs.
+                            <% } else{ %>
+                                <%= Math.trunc(pokemon.weight) %> lbs.
+                                    <% } %>
+                </h2>
             </div>
             <h2 class="entry-description">
                 <%= description %>
