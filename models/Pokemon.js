@@ -28,6 +28,16 @@ const pokemonSchema = new Schema({
         required: false,
         enum: ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy']
     },
+    height: {
+        type: Number,
+        max: 9999,
+        required: true
+    },
+    weight: {
+        type: Number,
+        max: 9999,
+        required: true
+    },
     description: {
         type: String,
         max: 500,
