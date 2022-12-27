@@ -1,5 +1,21 @@
 <%- layout('layouts/boilerplate') %>
-    <h1 class="position-relative">User Pokemon</h1>
+
+    <div class="row">
+        <div class="col">
+            <h1 class="position-relative">User Pokemon</h1>
+        </div>
+        <div class="col d-flex justify-content-end align-items-center">
+            <form action="/userPokemon">
+            <label for="filter">Filter By: </label>
+            <select name="filter" id="filter">
+                <option value="descending" <%=filter === 'descending' ? 'selected' : '' %>>Descending</option>
+                <option value="ascending" <%=filter === 'ascending' ? 'selected' : '' %>>Ascending</option>
+                <option value="a-z" <%=filter === 'a-z' ? 'selected' : '' %>>A-Z</option>
+            </select>
+            <button>Sort</button>
+        </form>
+        </div>
+    </div>
 
     <div class="row row-cols-1 row-cols-md-6 g-4 mb-5">
         <% for(let pokemon of userPokemon) {%>
@@ -7,7 +23,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title"><a href="/pokemon/<%= pokemon.pokedexNum %>">
-                                #<%= pokemon.pokedexNum %>: <%= pokemon.name %>
+                                #<%= pokemon.pokedexNum %>: <%= pokemon.name.toUpperCase() %>
                             </a></h5>
                     </div>
                 </div>

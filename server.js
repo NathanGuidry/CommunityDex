@@ -40,11 +40,18 @@ app.use(methodOverride('_method'))
 const nameChecker = async function (req, res, next) {
     const basePokemon = await P.getPokemonsList()
     const baseNames = basePokemon.results.slice(0, -numOfSpecialPokemon)
+    const userPokemon = await Pokemon.find({})
     const { name } = req.body
     const err = {}
     err.message = 'A pokemon with this name already exists'
     for (let i = 0; i < numOfBasePokemon; i++) {
         if (name.toLowerCase() === baseNames[i].name) {
+            res.render('error', { err })
+            return
+        }
+    }
+    for(let i = 0; i < userPokemon.length; i++){
+        if(name.toLowerCase() === userPokemon[i].name.toLowerCase()){
             res.render('error', { err })
             return
         }
@@ -67,15 +74,50 @@ app.get('/', (req, res) => {
 })
 
 app.get('/userPokemon', catchAsync(async (req, res) => {
-    const userPokemon = await Pokemon.find({})
-    res.render('pokemon/userPokemon', { userPokemon })
+    let userPokemon
+    const {filter} = req.query
+    if(!filter || filter === 'descending'){
+        userPokemon = await Pokemon.find({}).sort({pokedexNum: -1})
+    }
+    else if(filter === 'ascending'){
+        userPokemon = await Pokemon.find({})
+    }
+    else if(filter === 'a-z'){
+        userPokemon = await Pokemon.find({}).collation({locale:'en',strength: 2}).sort({name:1})
+    }
+    res.render('pokemon/userPokemon', { userPokemon, filter })
 }))
 
 app.get('/pokemon', catchAsync(async (req, res) => {
-    const pokemon = await P.getPokemonsList()
+    const {filter} = req.query
+    let pokemon = await P.getPokemonsList()
     const pokemonNames = pokemon.results.slice(0, -numOfSpecialPokemon)
     const userPokemon = await Pokemon.find({})
-    res.render('pokemon/index', { pokemonNames, userPokemon })
+    pokemon = pokemonNames.concat(userPokemon)
+    pokemon.forEach((value, index) => {
+        value.pokedexNum = index + 1
+    })
+    if(filter === 'descending'){
+        pokemon = pokemon.reverse((a, b) => {
+            return a.pokedexNum - b.pokedexNum
+        })
+    }
+    else if(filter === 'a-z'){
+        pokemon = pokemon.sort((a, b) => {
+                const fa = a.name.toLowerCase()
+                const fb = b.name.toLowerCase()
+            
+                if (fa < fb) {
+                    return -1
+                }
+                if (fa > fb) {
+                    return 1
+                }
+                return 0
+            
+        })
+    }
+    res.render('pokemon/index', { pokemon, filter })
 }))
 
 app.post('/pokemon', nameChecker, catchAsync(async (req, res) => {
