@@ -73,6 +73,24 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label" for="height">Height (ft): </label>
+                <input class="form-control" type="number" placeholder="Pokemon Height Here.." name="height" id="height"
+                   value="<%= pokemon.height %>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="weight">Weight (lbs): </label>
+                <input class="form-control" type="number" placeholder="Pokemon Weight Here.." name="weight" id="weight"
+                value="<%= pokemon.weight %>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+
+            <div class="mb-3">
                 <label class="form-label" for="description">Description: </label>
                 <textarea class="form-control" name="description" id="description" cols="30" rows="10"
                     placeholder="Pokemon Flavor Text Here.." required> <%= pokemon.description %>  </textarea>
