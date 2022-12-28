@@ -85,10 +85,18 @@
 
 a {
     text-decoration: none;
+    color: black;
 }
 
-.card-title>a {
+a:hover{
     color: black;
+}
+
+.card:hover {
+    transition: 0.75s;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    background-color: red;
+    border: 5px white;
 }
 
 @keyframes fadeIn {

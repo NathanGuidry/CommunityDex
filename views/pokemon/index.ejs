@@ -1,4 +1,42 @@
 <%- layout('layouts/boilerplate') %>
+
+    <% if(search) {%>
+        <div class="row">
+            <div class="col">
+                <h1 class="position-relative">Results for "<%= search %>"</h1>
+            </div>
+            <div class="col d-flex justify-content-end align-items-center">
+                <form action="/pokemon">
+                    <label for="filter">Filter By: </label>
+                    <select name="filter" id="filter">
+                        <option value="ascending" <%=filter === 'ascending' ? 'selected' : '' %>>Ascending</option>
+                        <option value="descending" <%=filter === 'descending' ? 'selected' : '' %>>Descending</option>
+                        <option value="a-z" <%=filter === 'a-z' ? 'selected' : '' %>>A-Z</option>
+                    </select>
+                    <input type="hidden" name="search" value="<%= search %>">
+                    <button>Sort</button>
+                </form>
+            </div>
+        </div>
+    
+        <div class="row row-cols-1 row-cols-md-6 g-4 mb-5">
+            <% pokemon.forEach((value, index)=> { %>
+                <div class="col">
+                    <div class="card">
+                        <a href="/pokemon/<%= value.item.pokedexNum %>">
+                            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= value.item.pokedexNum %>.png"
+                                class="card-img-top" alt="..." <a href="/pokemon/<%= value.item.pokedexNum %>"></a>
+                        <div class="card-body">
+                            <h5 class="card-title text-center"><a href="/pokemon/<%= value.item.pokedexNum %>">
+                                    #<%= value.item.pokedexNum %>: <%= pokemon[index].item.name.toUpperCase() %>
+                                </a></h5>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+    <% } else { %> 
+
     <div class="row">
         <div class="col">
             <h1 class="position-relative">All Pokemon</h1>
@@ -32,3 +70,5 @@
             </div>
             <% }) %>
     </div>
+
+    <% } %> 

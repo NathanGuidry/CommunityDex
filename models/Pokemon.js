@@ -6,8 +6,8 @@ const Schema = mongoose.Schema
 const pokemonSchema = new Schema({
     pokedexNum: {
         type: Number,
-        min: 906,
-        unique: true,
+        min: [906, 'A pokemon with that Pokedex # already exists'],
+        unique: [true, 'A pokemon with that Pokedex # already exists'],
         required: true
     },
     name: {
