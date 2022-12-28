@@ -12,6 +12,7 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 import { ExpressError } from './utils/ExpressError.js'
 import { catchAsync } from './utils/catchAsync.js'
+import Fuse from 'fuse.js'
 const numOfSpecialPokemon = 249
 const numOfBasePokemon = 905
 
@@ -89,7 +90,10 @@ app.get('/userPokemon', catchAsync(async (req, res) => {
 }))
 
 app.get('/pokemon', catchAsync(async (req, res) => {
-    const {filter} = req.query
+    const {filter, search} = req.query
+    const options = {
+        keys: ['name', 'pokedexNum']
+    }
     let pokemon = await P.getPokemonsList()
     const pokemonNames = pokemon.results.slice(0, -numOfSpecialPokemon)
     const userPokemon = await Pokemon.find({})
@@ -97,6 +101,10 @@ app.get('/pokemon', catchAsync(async (req, res) => {
     pokemon.forEach((value, index) => {
         value.pokedexNum = index + 1
     })
+    if(search){
+        const fuse = new Fuse(pokemon, options)
+        pokemon = fuse.search(search)
+    }
     if(filter === 'descending'){
         pokemon = pokemon.reverse((a, b) => {
             return a.pokedexNum - b.pokedexNum
@@ -104,8 +112,16 @@ app.get('/pokemon', catchAsync(async (req, res) => {
     }
     else if(filter === 'a-z'){
         pokemon = pokemon.sort((a, b) => {
-                const fa = a.name.toLowerCase()
-                const fb = b.name.toLowerCase()
+            let fa
+            let fb
+            if(search){
+                fa = a.item.name.toLowerCase()
+                fb = b.item.name.toLowerCase()
+            }
+            else{
+                fa = a.name.toLowerCase()
+                fb = b.name.toLowerCase()
+            }
             
                 if (fa < fb) {
                     return -1
@@ -117,7 +133,7 @@ app.get('/pokemon', catchAsync(async (req, res) => {
             
         })
     }
-    res.render('pokemon/index', { pokemon, filter })
+    res.render('pokemon/index', { pokemon, filter, search})
 }))
 
 app.post('/pokemon', nameChecker, catchAsync(async (req, res) => {
@@ -141,16 +157,19 @@ app.get('/pokemon/new', catchAsync(async (req, res) => {
 
 app.get('/pokemon/:id', catchAsync(async (req, res) => {
     const { id } = req.params
+    const maxPokemon = await Pokemon.findOne({}).sort({ pokedexNum: -1 })
+    const maxId = maxPokemon.pokedexNum
+    console.log(maxId)
     if (id <= numOfBasePokemon) {
         const pokemon = await P.getPokemonByName(id)
         const description = await englishDesc(id)
-        res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon })
+        res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon, maxId })
     }
     else {
         let pokemon = await Pokemon.find({ pokedexNum: id })
         pokemon = pokemon[0]
         const description = pokemon.description
-        res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon })
+        res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon, maxId })
     }
 }))
 

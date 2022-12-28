@@ -1,2 +1,10 @@
 <%- layout('layouts/boilerplate') %>
-    <h1 class="position-relative">Community Dex</h1>
+    <h1 class="position-relative d-flex justify-content-center">Community Dex</h1>
+
+    <div class="col-6 offset-3 my-3">
+        <form class="d-flex px-3 form-inline" role="search" action="/pokemon" method="GET">
+            <input class="form-control me-2 form-control" type="search" placeholder="Search for pokemon by pokedex # or name.." aria-label="Search" name=search>
+            <button class="btn btn-success" type="submit">Search</button>
+          </form>
+    </div>
+    
