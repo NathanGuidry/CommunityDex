@@ -12,7 +12,7 @@ const pokemonSchema = new Schema({
     },
     name: {
         type: String,
-        max: 12,
+        maxlength: 12,
         required: true,
         unique: true
     },
