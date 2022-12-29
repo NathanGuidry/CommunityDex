@@ -7,6 +7,8 @@ import { Pokemon } from '../models/Pokemon.js'
 import { catchAsync } from '../utils/catchAsync.js'
 import {pokemonSchema} from '../schemas.js'
 import Fuse from 'fuse.js'
+const Filter = require('bad-words')
+const filter = new Filter()
 const numOfSpecialPokemon = 249
 const numOfBasePokemon = 905
 
@@ -15,13 +17,21 @@ const P = new Pokedex()
 
 const validatePokemon = (req, res, next) => {
     const { error } = pokemonSchema.validate(req.body)
-    const {type1, type2} = req.body
+    const {type1, type2, name, description} = req.body
     if (error) {
         const msg = error.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
     }
     if(type1 === type2){
         const msg = 'Type 1 and Type 2 cannot be the same'
+        throw new ExpressError(msg, 400)
+    }
+    if(filter.isProfane(name)){
+        const msg = 'That pokemon name is not allowed'
+        throw new ExpressError(msg, 400)
+    }
+    if(filter.isProfane(description)){
+        const msg = 'That description is not allowed'
         throw new ExpressError(msg, 400)
     }
     next()
