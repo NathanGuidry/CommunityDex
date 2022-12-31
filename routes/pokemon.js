@@ -24,15 +24,18 @@ const validatePokemon = (req, res, next) => {
     }
     if(type1 === type2){
         const msg = 'Type 1 and Type 2 cannot be the same'
-        throw new ExpressError(msg, 400)
+        req.flash('error', msg)
+        res.redirect('back')
     }
     if(filter.isProfane(name)){
         const msg = 'That pokemon name is not allowed'
-        throw new ExpressError(msg, 400)
+        req.flash('error', msg)
+        res.redirect('back')
     }
     if(filter.isProfane(description)){
         const msg = 'That description is not allowed'
-        throw new ExpressError(msg, 400)
+        req.flash('error', msg)
+        res.redirect('back')
     }
     next()
 }
@@ -121,11 +124,13 @@ router.post('/', validatePokemon, nameChecker, catchAsync(async (req, res) => {
     if (type2) {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, type2, height, weight, description })
         await newPokemon.save()
+        req.flash('success', 'Successfully created Pokemon')
         res.redirect('/userPokemon')
     }
     else {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, height, weight, description })
         await newPokemon.save()
+        req.flash('success', 'Successfully created Pokemon')
         res.redirect('/userPokemon')
     }
 }))
@@ -146,6 +151,10 @@ router.get('/:id', catchAsync(async (req, res) => {
     }
     else {
         let pokemon = await Pokemon.find({ pokedexNum: id })
+        if(!pokemon.length){
+            req.flash('error', 'That Pokemon does not exist')
+            res.redirect('/pokemon')
+        }
         pokemon = pokemon[0]
         const description = pokemon.description
         res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon, maxId })
@@ -160,6 +169,7 @@ router.delete('/:id', catchAsync(async (req, res) => {
         pokemon.pokedexNum = pokemon.pokedexNum - 1
         await pokemon.save()
     }
+    req.flash('success', 'Successfully deleted Pokemon')
     res.redirect('/userPokemon')
 }))
 
@@ -175,19 +185,24 @@ router.patch('/:id', validatePokemon, nameChecker, catchAsync(async (req, res) =
     let { name, type1, type2, description } = req.body
     if (type2 === '') {
         const pokemon = await Pokemon.findOneAndUpdate({ pokedexNum: id }, { name, type1, $unset: { type2: "" }, description }, { runValidators: true, new: true })
+        req.flash('success', 'Successfully updated Pokemon')
     }
     else {
         const pokemon = await Pokemon.findOneAndUpdate({ pokedexNum: id }, { name, type1, type2, description }, { runValidators: true, new: true })
+        req.flash('success', 'Successfully updated Pokemon')
     }
     res.redirect(`/pokemon/${id}`)
 }))
+
+router.all('*', (req, res, next) => {
+    next(new ExpressError('Page Not Found', 404))
+})
 
 const handleDuplicateKey = err => {
     return new ExpressError('A pokemon with that name already exists', 500)
 }
 
 router.use((err, req, res, next) => {
-    console.dir(err)
     if (err.name === 'MongoServerError') err = handleDuplicateKey(err)
     next(err)
 })
