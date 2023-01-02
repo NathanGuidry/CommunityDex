@@ -10,11 +10,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const mongoose = require('mongoose')
 import { Pokemon } from './models/Pokemon.js'
+import {User} from './models/User.js'
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
+const passport = require('passport')
+const localStrategy = require('passport-local')
 import { ExpressError } from './utils/ExpressError.js'
 import { catchAsync } from './utils/catchAsync.js'
 import {pokemonRoutes} from './routes/pokemon.js'
+import {userRoutes} from './routes/user.js'
 
 import Pokedex from 'pokedex-promise-v2'
 const P = new Pokedex()
@@ -52,13 +56,22 @@ const sessionConfig = {
 app.use(session(sessionConfig))
 app.use(flash())
 
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new localStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
+
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user
     res.locals.success = req.flash('success')
     res.locals.error = req.flash('error')
     next()
 })
 
 app.use('/pokemon', pokemonRoutes)
+app.use('/', userRoutes)
 
 app.get('/', (req, res) => {
     res.render('home')

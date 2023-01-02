@@ -13,6 +13,7 @@ const numOfSpecialPokemon = 249
 const numOfBasePokemon = 905
 
 import Pokedex from 'pokedex-promise-v2'
+import { isLoggedIn } from "../middleware.js";
 const P = new Pokedex()
 
 const validatePokemon = (req, res, next) => {
@@ -25,17 +26,17 @@ const validatePokemon = (req, res, next) => {
     if(type1 === type2){
         const msg = 'Type 1 and Type 2 cannot be the same'
         req.flash('error', msg)
-        res.redirect('back')
+        return res.redirect('back')
     }
     if(filter.isProfane(name)){
         const msg = 'That pokemon name is not allowed'
         req.flash('error', msg)
-        res.redirect('back')
+        return res.redirect('back')
     }
     if(filter.isProfane(description)){
         const msg = 'That description is not allowed'
         req.flash('error', msg)
-        res.redirect('back')
+        return res.redirect('back')
     }
     next()
 }
@@ -44,19 +45,22 @@ const nameChecker = async function (req, res, next) {
     const basePokemon = await P.getPokemonsList()
     const baseNames = basePokemon.results.slice(0, -numOfSpecialPokemon)
     const userPokemon = await Pokemon.find({})
-    const { name } = req.body
+    const { name, pokedexNum } = req.body
     const err = {}
+    const currentPokemon = await Pokemon.findOne({pokedexNum})
     err.message = 'A pokemon with this name already exists'
-    for (let i = 0; i < numOfBasePokemon; i++) {
-        if (name.toLowerCase() === baseNames[i].name) {
-            res.render('error', { err })
-            return
+    if(req.method === 'PATCH' && name !== currentPokemon.name){
+        for (let i = 0; i < numOfBasePokemon; i++) {
+            if (name.toLowerCase() === baseNames[i].name) {
+                res.render('error', { err })
+                return
+            }
         }
-    }
-    for(let i = 0; i < userPokemon.length; i++){
-        if(name.toLowerCase() === userPokemon[i].name.toLowerCase()){
-            res.render('error', { err })
-            return
+        for(let i = 0; i < userPokemon.length; i++){
+            if(name.toLowerCase() === userPokemon[i].name.toLowerCase()){
+                res.render('error', { err })
+                return
+            }
         }
     }
     next()
@@ -119,7 +123,7 @@ router.get('/', catchAsync(async (req, res) => {
     res.render('pokemon/index', { pokemon, filter, search})
 }))
 
-router.post('/', validatePokemon, nameChecker, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, validatePokemon, nameChecker, catchAsync(async (req, res) => {
     const { pokedexNum, name, type1, type2, height, weight, description } = req.body
     if (type2) {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, type2, height, weight, description })
@@ -135,7 +139,7 @@ router.post('/', validatePokemon, nameChecker, catchAsync(async (req, res) => {
     }
 }))
 
-router.get('/new', catchAsync(async (req, res) => {
+router.get('/new', isLoggedIn, catchAsync(async (req, res) => {
     const maxId = await Pokemon.findOne({}).sort({ pokedexNum: -1 })
     res.render('pokemon/new', { maxId })
 }))
@@ -161,7 +165,7 @@ router.get('/:id', catchAsync(async (req, res) => {
     }
 }))
 
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params
     const pokemon = await Pokemon.findOneAndDelete({ pokedexNum: id })
     const remainingPokemon = await Pokemon.find({ pokedexNum: { $gt: id } })
@@ -173,14 +177,14 @@ router.delete('/:id', catchAsync(async (req, res) => {
     res.redirect('/userPokemon')
 }))
 
-router.get('/:id/edit', catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
     const { id } = req.params
     let pokemon = await Pokemon.find({ pokedexNum: id })
     pokemon = pokemon[0]
     res.render('pokemon/edit', { id, pokemon })
 }))
 
-router.patch('/:id', validatePokemon, nameChecker, catchAsync(async (req, res) => {
+router.patch('/:id', isLoggedIn, validatePokemon, nameChecker, catchAsync(async (req, res) => {
     const { id } = req.params
     let { name, type1, type2, description } = req.body
     if (type2 === '') {
@@ -213,5 +217,4 @@ router.use((err, req, res, next) => {
 })
 
 const pokemonRoutes = router
-
 export {pokemonRoutes}
