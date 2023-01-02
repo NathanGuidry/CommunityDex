@@ -12,6 +12,9 @@ const filter = new Filter()
 const numOfSpecialPokemon = 249
 const numOfBasePokemon = 905
 
+const words = require('../extra-bad-words.json')
+filter.addWords(...words)
+
 import Pokedex from 'pokedex-promise-v2'
 import { isLoggedIn } from "../middleware.js";
 const P = new Pokedex()

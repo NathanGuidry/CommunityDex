@@ -6,12 +6,27 @@ const passport = require('passport')
 import { ExpressError } from '../utils/ExpressError.js'
 import { User } from '../models/User.js'
 import { catchAsync } from '../utils/catchAsync.js'
+import Fuse from 'fuse.js'
+const Filter = require('bad-words')
+const filter = new Filter()
+
+const words = require('../extra-bad-words.json')
+filter.addWords(...words)
+
+const usernameChecker = (req, res, next) => {
+    const {username} = req.body
+    if(filter.isProfane(username)){
+        const msg = 'That username is not allowed'
+        req.flash('error', msg)
+        return res.redirect('back')
+    }
+}
 
 router.get('/register', (req, res) => {
     res.render('user/register')
 })
 
-router.post('/register', catchAsync(async (req,res) => {
+router.post('/register', usernameChecker, catchAsync(async (req,res) => {
     try{
         const {email, username, password} = req.body
         const user = new User({email, username})
