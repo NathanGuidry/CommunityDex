@@ -18,7 +18,7 @@ db.once("open", () => {
 
 const newSeed = async function () {
     await Pokemon.deleteMany({})
-    const mon = new Pokemon({ pokedexNum: 906, name: 'hi', type1: 'grass', height: '6', weight: '130', description: 'hi' })
+    const mon = new Pokemon({ pokedexNum: 906, name: 'hi', type1: 'grass', height: '6', weight: '130', description: 'hi', author: '63b226e17f864def3b536e06' })
     await mon.save()
 }
 

@@ -44,6 +44,10 @@ const pokemonSchema = new Schema({
         type: String,
         maxlength: [500, 'Description is too long'],
         required: true
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     }
 })
 

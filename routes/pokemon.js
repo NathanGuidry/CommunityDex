@@ -5,7 +5,7 @@ const router = express.Router()
 import { ExpressError } from '../utils/ExpressError.js'
 import { Pokemon } from '../models/Pokemon.js'
 import { catchAsync } from '../utils/catchAsync.js'
-import {pokemonSchema} from '../schemas.js'
+import { pokemonSchema } from '../schemas.js'
 import Fuse from 'fuse.js'
 const Filter = require('bad-words')
 const filter = new Filter()
@@ -16,71 +16,11 @@ const words = require('../extra-bad-words.json')
 filter.addWords(...words)
 
 import Pokedex from 'pokedex-promise-v2'
-import { isLoggedIn } from "../middleware.js";
+import { isAuthorized, isLoggedIn, validatePokemon, nameChecker, englishDesc } from "../middleware.js";
 const P = new Pokedex()
 
-const validatePokemon = (req, res, next) => {
-    const { error } = pokemonSchema.validate(req.body)
-    const {type1, type2, name, description} = req.body
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
-        throw new ExpressError(msg, 400)
-    }
-    if(type1 === type2){
-        const msg = 'Type 1 and Type 2 cannot be the same'
-        req.flash('error', msg)
-        return res.redirect('back')
-    }
-    if(filter.isProfane(name)){
-        const msg = 'That pokemon name is not allowed'
-        req.flash('error', msg)
-        return res.redirect('back')
-    }
-    if(filter.isProfane(description)){
-        const msg = 'That description is not allowed'
-        req.flash('error', msg)
-        return res.redirect('back')
-    }
-    next()
-}
-
-const nameChecker = async function (req, res, next) {
-    const basePokemon = await P.getPokemonsList()
-    const baseNames = basePokemon.results.slice(0, -numOfSpecialPokemon)
-    const userPokemon = await Pokemon.find({})
-    const { name, pokedexNum } = req.body
-    const err = {}
-    const currentPokemon = await Pokemon.findOne({pokedexNum})
-    err.message = 'A pokemon with this name already exists'
-    if(req.method === 'PATCH' && name !== currentPokemon.name){
-        for (let i = 0; i < numOfBasePokemon; i++) {
-            if (name.toLowerCase() === baseNames[i].name) {
-                res.render('error', { err })
-                return
-            }
-        }
-        for(let i = 0; i < userPokemon.length; i++){
-            if(name.toLowerCase() === userPokemon[i].name.toLowerCase()){
-                res.render('error', { err })
-                return
-            }
-        }
-    }
-    next()
-}
-
-const englishDesc = async function (id) {
-    const species = await P.getPokemonSpeciesByName(id)
-    const numOfDescs = species.flavor_text_entries.length
-    for (let i = 0; i < numOfDescs; i++) {
-        if (species.flavor_text_entries[i].language.name === 'en') {
-            return species.flavor_text_entries[i].flavor_text
-        }
-    }
-}
-
 router.get('/', catchAsync(async (req, res) => {
-    const {filter, search} = req.query
+    const { filter, search } = req.query
     const options = {
         keys: ['name', 'pokedexNum']
     }
@@ -91,51 +31,53 @@ router.get('/', catchAsync(async (req, res) => {
     pokemon.forEach((value, index) => {
         value.pokedexNum = index + 1
     })
-    if(search){
+    if (search) {
         const fuse = new Fuse(pokemon, options)
         pokemon = fuse.search(search)
     }
-    if(filter === 'descending'){
+    if (filter === 'descending') {
         pokemon = pokemon.reverse((a, b) => {
             return a.pokedexNum - b.pokedexNum
         })
     }
-    else if(filter === 'a-z'){
+    else if (filter === 'a-z') {
         pokemon = pokemon.sort((a, b) => {
             let fa
             let fb
-            if(search){
+            if (search) {
                 fa = a.item.name.toLowerCase()
                 fb = b.item.name.toLowerCase()
             }
-            else{
+            else {
                 fa = a.name.toLowerCase()
                 fb = b.name.toLowerCase()
             }
-            
-                if (fa < fb) {
-                    return -1
-                }
-                if (fa > fb) {
-                    return 1
-                }
-                return 0
-            
+
+            if (fa < fb) {
+                return -1
+            }
+            if (fa > fb) {
+                return 1
+            }
+            return 0
+
         })
     }
-    res.render('pokemon/index', { pokemon, filter, search})
+    res.render('pokemon/index', { pokemon, filter, search })
 }))
 
 router.post('/', isLoggedIn, validatePokemon, nameChecker, catchAsync(async (req, res) => {
     const { pokedexNum, name, type1, type2, height, weight, description } = req.body
     if (type2) {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, type2, height, weight, description })
+        newPokemon.author = req.user._id
         await newPokemon.save()
         req.flash('success', 'Successfully created Pokemon')
         res.redirect('/userPokemon')
     }
     else {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, height, weight, description })
+        newPokemon.author = req.user._id
         await newPokemon.save()
         req.flash('success', 'Successfully created Pokemon')
         res.redirect('/userPokemon')
@@ -157,8 +99,8 @@ router.get('/:id', catchAsync(async (req, res) => {
         res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon, maxId })
     }
     else {
-        let pokemon = await Pokemon.find({ pokedexNum: id })
-        if(!pokemon.length){
+        let pokemon = await Pokemon.find({ pokedexNum: id }).populate('author')
+        if (!pokemon.length) {
             req.flash('error', 'That Pokemon does not exist')
             res.redirect('/pokemon')
         }
@@ -168,7 +110,7 @@ router.get('/:id', catchAsync(async (req, res) => {
     }
 }))
 
-router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, isAuthorized, catchAsync(async (req, res) => {
     const { id } = req.params
     const pokemon = await Pokemon.findOneAndDelete({ pokedexNum: id })
     const remainingPokemon = await Pokemon.find({ pokedexNum: { $gt: id } })
@@ -180,14 +122,14 @@ router.delete('/:id', isLoggedIn, catchAsync(async (req, res) => {
     res.redirect('/userPokemon')
 }))
 
-router.get('/:id/edit', isLoggedIn, catchAsync(async (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthorized, catchAsync(async (req, res) => {
     const { id } = req.params
     let pokemon = await Pokemon.find({ pokedexNum: id })
     pokemon = pokemon[0]
     res.render('pokemon/edit', { id, pokemon })
 }))
 
-router.patch('/:id', isLoggedIn, validatePokemon, nameChecker, catchAsync(async (req, res) => {
+router.patch('/:id', isLoggedIn, isAuthorized, validatePokemon, nameChecker, catchAsync(async (req, res) => {
     const { id } = req.params
     let { name, type1, type2, description } = req.body
     if (type2 === '') {
@@ -220,4 +162,4 @@ router.use((err, req, res, next) => {
 })
 
 const pokemonRoutes = router
-export {pokemonRoutes}
+export { pokemonRoutes }
