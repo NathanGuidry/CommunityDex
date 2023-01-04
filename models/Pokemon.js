@@ -1,6 +1,7 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const mongoose = require('mongoose')
+import { Comment } from "./Comment.js";
 const Schema = mongoose.Schema
 
 const pokemonSchema = new Schema({
@@ -48,6 +49,22 @@ const pokemonSchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
         ref: 'User'
+    },
+    comments: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Comment'
+        }
+    ]
+})
+
+pokemonSchema.post('findOneAndDelete', async function (doc) {
+    if (doc) {
+        await Comment.deleteMany({
+            _id: {
+                $in: doc.comments
+            }
+        })
     }
 })
 
