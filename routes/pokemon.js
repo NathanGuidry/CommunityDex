@@ -5,7 +5,6 @@ const router = express.Router()
 import { ExpressError } from '../utils/ExpressError.js'
 import { Pokemon } from '../models/Pokemon.js'
 import { catchAsync } from '../utils/catchAsync.js'
-import { pokemonSchema } from '../schemas.js'
 import Fuse from 'fuse.js'
 const Filter = require('bad-words')
 const filter = new Filter()
@@ -68,6 +67,7 @@ router.get('/', catchAsync(async (req, res) => {
 
 router.post('/', isLoggedIn, validatePokemon, nameChecker, catchAsync(async (req, res) => {
     const { pokedexNum, name, type1, type2, height, weight, description } = req.body
+    console.log(req.body)
     if (type2) {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, type2, height, weight, description })
         newPokemon.author = req.user._id
@@ -99,7 +99,12 @@ router.get('/:id', catchAsync(async (req, res) => {
         res.render('pokemon/show', { pokemon, id, description, numOfBasePokemon, maxId })
     }
     else {
-        let pokemon = await Pokemon.find({ pokedexNum: id }).populate('author')
+        let pokemon = await Pokemon.find({ pokedexNum: id }).populate({
+            path: 'comments',
+            populate: {
+                path: 'author'
+            }
+        }).populate('author')
         if (!pokemon.length) {
             req.flash('error', 'That Pokemon does not exist')
             res.redirect('/pokemon')
@@ -142,10 +147,6 @@ router.patch('/:id', isLoggedIn, isAuthorized, validatePokemon, nameChecker, cat
     }
     res.redirect(`/pokemon/${id}`)
 }))
-
-router.all('*', (req, res, next) => {
-    next(new ExpressError('Page Not Found', 404))
-})
 
 const handleDuplicateKey = err => {
     return new ExpressError('A pokemon with that name already exists', 500)

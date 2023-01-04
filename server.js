@@ -10,15 +10,16 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const mongoose = require('mongoose')
 import { Pokemon } from './models/Pokemon.js'
-import {User} from './models/User.js'
+import { User } from './models/User.js'
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const passport = require('passport')
 const localStrategy = require('passport-local')
 import { ExpressError } from './utils/ExpressError.js'
 import { catchAsync } from './utils/catchAsync.js'
-import {pokemonRoutes} from './routes/pokemon.js'
-import {userRoutes} from './routes/user.js'
+import { pokemonRoutes } from './routes/pokemon.js'
+import { userRoutes } from './routes/user.js'
+import { commentRoutes } from './routes/comment.js'
 
 import Pokedex from 'pokedex-promise-v2'
 const P = new Pokedex()
@@ -71,6 +72,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/pokemon', pokemonRoutes)
+app.use('/pokemon/:id/comments', commentRoutes)
 app.use('/', userRoutes)
 
 app.get('/', (req, res) => {
@@ -79,15 +81,15 @@ app.get('/', (req, res) => {
 
 app.get('/userPokemon', catchAsync(async (req, res) => {
     let userPokemon
-    const {filter} = req.query
-    if(!filter || filter === 'descending'){
-        userPokemon = await Pokemon.find({}).sort({pokedexNum: -1})
+    const { filter } = req.query
+    if (!filter || filter === 'descending') {
+        userPokemon = await Pokemon.find({}).sort({ pokedexNum: -1 })
     }
-    else if(filter === 'ascending'){
+    else if (filter === 'ascending') {
         userPokemon = await Pokemon.find({})
     }
-    else if(filter === 'a-z'){
-        userPokemon = await Pokemon.find({}).collation({locale:'en',strength: 2}).sort({name:1})
+    else if (filter === 'a-z') {
+        userPokemon = await Pokemon.find({}).collation({ locale: 'en', strength: 2 }).sort({ name: 1 })
     }
     res.render('pokemon/userPokemon', { userPokemon, filter })
 }))

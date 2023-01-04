@@ -3,12 +3,11 @@ const require = createRequire(import.meta.url);
 const express = require('express')
 const router = express.Router()
 const passport = require('passport')
-import { ExpressError } from '../utils/ExpressError.js'
 import { User } from '../models/User.js'
 import { catchAsync } from '../utils/catchAsync.js'
-import Fuse from 'fuse.js'
 const Filter = require('bad-words')
 const filter = new Filter()
+import { validateUser } from '../middleware.js'
 
 const words = require('../extra-bad-words.json')
 filter.addWords(...words)
@@ -27,7 +26,7 @@ router.get('/register', (req, res) => {
     res.render('user/register')
 })
 
-router.post('/register', usernameChecker, catchAsync(async (req, res, next) => {
+router.post('/register', validateUser, usernameChecker, catchAsync(async (req, res, next) => {
     try {
         const { email, username, password } = req.body
         const user = new User({ email, username })

@@ -99,3 +99,48 @@
 
 
             </div>
+
+            <% if(id> numOfBasePokemon) {%>
+                <h1 class="text-center my-3">Comments (<%= pokemon.comments.length %>)</h1>
+                <hr>
+
+                <div>
+                    <% if(currentUser) {%>
+                        <div class="col">
+                            <h2>Create a New Comment:</h2>
+                            <form action="/pokemon/<%= id %>/comments" method="POST" class="mb-5">
+                                <textarea name="body" id="body" cols="40" rows="3" class="d-block"
+                                    placeholder="Add a Comment..." style="width: 100%; max-width: 100%;"></textarea>
+                                <button class="btn btn-success mt-3">Create</button>
+                            </form>
+                        </div>
+                        <% } %>
+                            <% if(pokemon.comments.length) {%>
+                                <% for(let comment of pokemon.comments.reverse()) {%>
+                                    <div class="card my-5">
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item fw-bold">
+                                                By: <a href="/user/<%= comment.author._id %>">
+                                                    <%= comment.author.username %>
+                                                </a>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <%= comment.body %>
+                                            </li>
+                                            <% if(currentUser && comment.author._id.equals(currentUser._id)) {%>
+                                                <li class="list-group-item">
+                                                    <form
+                                                        action="/pokemon/<%= id %>/comments/<%= comment._id %>?_method=DELETE"
+                                                        method="POST">
+                                                        <button class="btn btn-danger">Delete</button>
+                                                    </form>
+                                                </li>
+                                                <% } %>
+                                        </ul>
+                                    </div>
+                                    <% } %>
+                                        <% } else {%>
+                                            <h3 class="text-center mb-5">No Comments to Show</h3>
+                                            <% } %>
+                                                <% } %>
+                </div>

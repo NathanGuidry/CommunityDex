@@ -1,6 +1,17 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 import { Pokemon } from './models/Pokemon.js'
 import Pokedex from 'pokedex-promise-v2'
 const P = new Pokedex()
+import { commentSchema, pokemonSchema, userSchema } from './schemas.js'
+const Filter = require('bad-words')
+const filter = new Filter()
+const words = require('./extra-bad-words.json')
+filter.addWords(...words)
+import { ExpressError } from './utils/ExpressError.js'
+
+const numOfSpecialPokemon = 249
+const numOfBasePokemon = 905
 
 export const isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
@@ -42,6 +53,24 @@ export const validatePokemon = (req, res, next) => {
         const msg = 'That description is not allowed'
         req.flash('error', msg)
         return res.redirect('back')
+    }
+    next()
+}
+
+export const validateUser = (req, res, next) => {
+    const { error } = userSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
+    }
+    next()
+}
+
+export const validateComment = (req, res, next) => {
+    const { error } = commentSchema.validate(req.body)
+    if (error) {
+        const msg = error.details.map(el => el.message).join(',')
+        throw new ExpressError(msg, 400)
     }
     next()
 }
