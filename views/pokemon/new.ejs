@@ -2,7 +2,7 @@
     <h1>Create a New Pokemon</h1>
 
     <div class="col-6 offset-3">
-        <form action="/pokemon" method="POST" class="validatedForm" novalidate>
+        <form action="/pokemon" method="POST" class="validatedForm" novalidate enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="pokedexNum">Pokedex #: </label>
                 <input class="form-control" type="text" placeholder="<%= maxId.pokedexNum + 1 %>"
@@ -12,6 +12,14 @@
             <div class="mb-3">
                 <label class="form-label" for="name">Name: </label>
                 <input class="form-control" type="text" placeholder="Unique Name Here.." name="name" id="name" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Image:</label>
+                <input class="form-control" type="file" id="image" name="image" accept=".jpg, .jpeg, .png" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>

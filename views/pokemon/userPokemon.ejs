@@ -21,6 +21,8 @@
         <% for(let pokemon of userPokemon) {%>
             <div class="col">
                 <div class="card pokemonCard">
+                    <a href="/pokemon/<%= pokemon.pokedexNum %>"><img src="<%= pokemon.image.url %>" alt=""
+                            class="card-img-top"></a>
                     <div class="card-body">
                         <h5 class="card-title"><a href="/pokemon/<%= pokemon.pokedexNum %>">
                                 #<%= pokemon.pokedexNum %>: <%= pokemon.name.toUpperCase() %>

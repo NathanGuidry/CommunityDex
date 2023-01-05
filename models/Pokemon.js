@@ -41,6 +41,10 @@ const pokemonSchema = new Schema({
         max: [9999, 'Weight is too large'],
         required: true
     },
+    image: {
+        url: String,
+        filename: String
+    },
     description: {
         type: String,
         maxlength: [500, 'Description is too long'],

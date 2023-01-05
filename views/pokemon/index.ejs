@@ -24,13 +24,19 @@
                 <div class="col">
                     <div class="card pokemonCard">
                         <a href="/pokemon/<%= value.item.pokedexNum %>">
+                            <% if(value.item.pokedexNum> numOfBasePokemon) {%>
+                                <img src="<%= value.item.image.url %>" alt="" class="card-img-top">
+                        </a>
+                        <% } else { %>
                             <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= value.item.pokedexNum %>.png"
-                                class="card-img-top" alt="..." <a href="/pokemon/<%= value.item.pokedexNum %>"></a>
-                        <div class="card-body">
-                            <h5 class="card-title text-center"><a href="/pokemon/<%= value.item.pokedexNum %>">
-                                    #<%= value.item.pokedexNum %>: <%= pokemon[index].item.name.toUpperCase() %>
-                                </a></h5>
-                        </div>
+                                class="card-img-top" alt="">
+                            </a>
+                            <% } %>
+                                <div class="card-body">
+                                    <h5 class="card-title text-center"><a href="/pokemon/<%= value.item.pokedexNum %>">
+                                            #<%= value.item.pokedexNum %>: <%= pokemon[index].item.name.toUpperCase() %>
+                                        </a></h5>
+                                </div>
                     </div>
                 </div>
                 <% }) %>
@@ -59,13 +65,19 @@
                     <div class="col">
                         <div class="card pokemonCard">
                             <a href="/pokemon/<%= value.pokedexNum %>">
+                                <% if(value.pokedexNum> numOfBasePokemon) {%>
+                                    <img src="<%= value.image.url %>" alt="" class="card-img-top">
+                            </a>
+                            <% } else { %>
                                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= value.pokedexNum %>.png"
-                                    class="card-img-top" alt="..." <a href="/pokemon/<%= value.pokedexNum %>"></a>
-                            <div class="card-body">
-                                <h5 class="card-title text-center"><a href="/pokemon/<%= value.pokedexNum %>">
-                                        #<%= value.pokedexNum %>: <%= pokemon[index].name.toUpperCase() %>
-                                    </a></h5>
-                            </div>
+                                    class="card-img-top" alt="" <a href="/pokemon/<%= value.pokedexNum %>">
+                                </a>
+                                <% } %>
+                                    <div class="card-body">
+                                        <h5 class="card-title text-center"><a href="/pokemon/<%= value.pokedexNum %>">
+                                                #<%= value.pokedexNum %>: <%= pokemon[index].name.toUpperCase() %>
+                                            </a></h5>
+                                    </div>
                         </div>
                     </div>
                     <% }) %>
