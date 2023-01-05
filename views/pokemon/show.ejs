@@ -36,65 +36,71 @@
 
             <div class="inner-bg-image vh-100">
                 <div class="row">
-                    <div class="col-5">
-                        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png"
-                            alt="" class="entry-image">
-                    </div>
-                    <div class="col">
-                        <h1 class="entry-name">
-                            #<%= id %>
-                                <%= pokemon.name.toUpperCase() %>
-                        </h1>
-                        <h2 class="author">BY:
-                            <% if(id> numOfBasePokemon) {%>
-                                <a href="/user/<%= pokemon.author._id %>">
-                                    <%= pokemon.author.username %>
-                                </a>
-                                <% } else { %>
-                                    GAMEFREAK
-                                    <% } %>
-                        </h2>
-                        <h2 class="entry-types">
-                            <% if(id <=numOfBasePokemon){ %>
-                                <span class="entry-type1">
-                                    <%= pokemon.types[0].type.name.toUpperCase() %>
-                                </span>
-                                <% if(pokemon.types[1]){ %>
-                                    <span class="entry-type2">
-                                        <%= pokemon.types[1].type.name.toUpperCase() %>
-                                    </span>
-                                    <% } %>
-                                        <% } else { %>
+                    <% if(id> numOfBasePokemon) {%>
+                        <div class="col-5">
+                            <img src="<%= pokemon.image.url %>" alt="" class="entry-image">
+                        </div>
+                        <% } else {%>
+                            <div class="col-5">
+                                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/<%= id %>.png"
+                                    alt="" class="entry-image">
+                            </div>
+                            <% } %>
+                                <div class="col">
+                                    <h1 class="entry-name">
+                                        #<%= id %>
+                                            <%= pokemon.name.toUpperCase() %>
+                                    </h1>
+                                    <h2 class="author">BY:
+                                        <% if(id> numOfBasePokemon) {%>
+                                            <a href="/user/<%= pokemon.author._id %>">
+                                                <%= pokemon.author.username %>
+                                            </a>
+                                            <% } else { %>
+                                                GAMEFREAK
+                                                <% } %>
+                                    </h2>
+                                    <h2 class="entry-types">
+                                        <% if(id <=numOfBasePokemon){ %>
                                             <span class="entry-type1">
-                                                <%= pokemon.type1.toUpperCase() %>
+                                                <%= pokemon.types[0].type.name.toUpperCase() %>
                                             </span>
-                                            <% if(pokemon.type2){ %>
+                                            <% if(pokemon.types[1]){ %>
                                                 <span class="entry-type2">
-                                                    <%= pokemon.type2.toUpperCase() %>
+                                                    <%= pokemon.types[1].type.name.toUpperCase() %>
                                                 </span>
                                                 <% } %>
-                                                    <% } %>
+                                                    <% } else { %>
+                                                        <span class="entry-type1">
+                                                            <%= pokemon.type1.toUpperCase() %>
+                                                        </span>
+                                                        <% if(pokemon.type2){ %>
+                                                            <span class="entry-type2">
+                                                                <%= pokemon.type2.toUpperCase() %>
+                                                            </span>
+                                                            <% } %>
+                                                                <% } %>
 
-                        </h2>
+                                    </h2>
 
-                        <h2 class="entry-height">
-                            <% if (id <=numOfBasePokemon){ %>
-                                <%= Math.trunc(pokemon.height / 3.048) %>'
-                                    <% } else{ %>
-                                        <%= Math.trunc(pokemon.height) %>'
-                                            <% } %>
-                        </h2>
-                        <h2 class="entry-weight">
-                            <% if (id <=numOfBasePokemon) {%>
-                                <%= Math.trunc(pokemon.weight / 4.536) %> lbs.
-                                    <% } else{ %>
-                                        <%= Math.trunc(pokemon.weight) %> lbs.
-                                            <% } %>
-                        </h2>
-                    </div>
-                    <h2 class="entry-description">
-                        <%= description %>
-                    </h2>
+                                    <h2 class="entry-height">
+                                        <% if (id <=numOfBasePokemon){ %>
+                                            <%= Math.trunc(pokemon.height / 3.048) %>'
+                                                <% } else{ %>
+                                                    <%= Math.trunc(pokemon.height) %>'
+                                                        <% } %>
+                                    </h2>
+                                    <h2 class="entry-weight">
+                                        <% if (id <=numOfBasePokemon) {%>
+                                            <%= Math.trunc(pokemon.weight / 4.536) %> lbs.
+                                                <% } else{ %>
+                                                    <%= Math.trunc(pokemon.weight) %> lbs.
+                                                        <% } %>
+                                    </h2>
+                                </div>
+                                <h2 class="entry-description">
+                                    <%= description %>
+                                </h2>
                 </div>
 
 

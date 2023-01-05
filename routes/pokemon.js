@@ -8,6 +8,10 @@ import { catchAsync } from '../utils/catchAsync.js'
 import Fuse from 'fuse.js'
 const Filter = require('bad-words')
 const filter = new Filter()
+const multer = require('multer')
+import { storage, cloudinary } from '../cloudinary/index.js';
+const upload = multer({ storage })
+
 const numOfSpecialPokemon = 249
 const numOfBasePokemon = 905
 
@@ -62,25 +66,31 @@ router.get('/', catchAsync(async (req, res) => {
 
         })
     }
-    res.render('pokemon/index', { pokemon, filter, search })
+    res.render('pokemon/index', { pokemon, filter, search, numOfBasePokemon })
 }))
 
-router.post('/', isLoggedIn, validatePokemon, nameChecker, catchAsync(async (req, res) => {
+router.post('/', isLoggedIn, upload.single('image'), validatePokemon, nameChecker, catchAsync(async (req, res) => {
     const { pokedexNum, name, type1, type2, height, weight, description } = req.body
-    console.log(req.body)
+    if (!req.file) {
+        req.flash('error', 'You must provide a picture of the pokemon')
+        res.redirect('/pokemon/new')
+    }
+    const { path, filename } = req.file
     if (type2) {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, type2, height, weight, description })
         newPokemon.author = req.user._id
+        newPokemon.image = { url: path, filename }
         await newPokemon.save()
         req.flash('success', 'Successfully created Pokemon')
-        res.redirect('/userPokemon')
+        res.redirect(`/pokemon/${pokedexNum}`)
     }
     else {
         const newPokemon = new Pokemon({ pokedexNum, name, type1, height, weight, description })
         newPokemon.author = req.user._id
+        newPokemon.image = { url: path, filename }
         await newPokemon.save()
         req.flash('success', 'Successfully created Pokemon')
-        res.redirect('/userPokemon')
+        res.redirect(`/pokemon/${pokedexNum}`)
     }
 }))
 
@@ -134,11 +144,23 @@ router.get('/:id/edit', isLoggedIn, isAuthorized, catchAsync(async (req, res) =>
     res.render('pokemon/edit', { id, pokemon })
 }))
 
-router.patch('/:id', isLoggedIn, isAuthorized, validatePokemon, nameChecker, catchAsync(async (req, res) => {
+router.patch('/:id', isLoggedIn, isAuthorized, upload.single('image'), validatePokemon, nameChecker, catchAsync(async (req, res) => {
     const { id } = req.params
+    console.log(req.file)
     let { name, type1, type2, description } = req.body
-    if (type2 === '') {
+    if (req.file) {
+        const tempPokemon = await Pokemon.findOne({ pokedexNum: id })
+        await cloudinary.uploader.destroy(tempPokemon.image.filename)
+    }
+    if (type2 === '' && req.file) {
+        const pokemon = await Pokemon.findOneAndUpdate({ pokedexNum: id }, { name, type1, $unset: { type2: "" }, description, image: { url: req.file.path, filename: req.file.filename } }, { runValidators: true, new: true })
+        req.flash('success', 'Successfully updated Pokemon')
+    } else if (type2 === '') {
         const pokemon = await Pokemon.findOneAndUpdate({ pokedexNum: id }, { name, type1, $unset: { type2: "" }, description }, { runValidators: true, new: true })
+        req.flash('success', 'Successfully updated Pokemon')
+    }
+    else if (req.file) {
+        const pokemon = await Pokemon.findOneAndUpdate({ pokedexNum: id }, { name, type1, type2, description, image: { url: req.file.path, filename: req.file.filename } }, { runValidators: true, new: true })
         req.flash('success', 'Successfully updated Pokemon')
     }
     else {

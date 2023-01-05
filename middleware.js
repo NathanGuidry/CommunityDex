@@ -3,7 +3,7 @@ const require = createRequire(import.meta.url);
 import { Pokemon } from './models/Pokemon.js'
 import Pokedex from 'pokedex-promise-v2'
 const P = new Pokedex()
-import { commentSchema, pokemonSchema, userSchema } from './schemas.js'
+import { commentSchema, pokemonSchema, updatePokemonSchema, userSchema } from './schemas.js'
 const Filter = require('bad-words')
 const filter = new Filter()
 const words = require('./extra-bad-words.json')
@@ -33,10 +33,17 @@ export const isAuthorized = async (req, res, next) => {
 }
 
 export const validatePokemon = (req, res, next) => {
-    const { error } = pokemonSchema.validate(req.body)
+    let errorCheck
+    if (req.method === 'PATCH') {
+        const { error } = updatePokemonSchema.validate(req.body)
+        errorCheck = error
+    } else {
+        const { error } = pokemonSchema.validate(req.body)
+        errorCheck = error
+    }
     const { type1, type2, name, description } = req.body
-    if (error) {
-        const msg = error.details.map(el => el.message).join(',')
+    if (errorCheck) {
+        const msg = errorCheck.details.map(el => el.message).join(',')
         throw new ExpressError(msg, 400)
     }
     if (type1 === type2) {

@@ -2,6 +2,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config()
+}
+
 const express = require('express')
 const app = express()
 const session = require('express-session')
@@ -9,12 +14,14 @@ const flash = require('connect-flash')
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const mongoose = require('mongoose')
-import { Pokemon } from './models/Pokemon.js'
-import { User } from './models/User.js'
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const passport = require('passport')
 const localStrategy = require('passport-local')
+
+import { Pokemon } from './models/Pokemon.js'
+import { User } from './models/User.js'
+
 import { ExpressError } from './utils/ExpressError.js'
 import { catchAsync } from './utils/catchAsync.js'
 import { pokemonRoutes } from './routes/pokemon.js'

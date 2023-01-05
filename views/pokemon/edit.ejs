@@ -2,7 +2,8 @@
     <h1>Edit Pokemon</h1>
 
     <div class="col-6 offset-3">
-        <form action="/pokemon/<%= id %>?_method=PATCH" method="POST" class="validatedForm" novalidate>
+        <form action="/pokemon/<%= id %>?_method=PATCH" method="POST" class="validatedForm" novalidate
+            enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="pokedexNum">Pokedex #: </label>
                 <input class="form-control" type="text" placeholder="<%= id %>" value="<%= id %>" name="pokedexNum"
@@ -12,6 +13,14 @@
             <div class="mb-3">
                 <label class="form-label" for="name">Name: </label>
                 <input class="form-control" type="text" value="<%= pokemon.name %>" name="name" id="name" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="image" class="form-label">Replace Image (optional):</label>
+                <input class="form-control" type="file" id="image" name="image" accept=".jpg, .jpeg, .png">
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -75,7 +84,7 @@
             <div class="mb-3">
                 <label class="form-label" for="height">Height (ft): </label>
                 <input class="form-control" type="number" placeholder="Pokemon Height Here.." name="height" id="height"
-                   value="<%= pokemon.height %>" required>
+                    value="<%= pokemon.height %>" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
@@ -84,7 +93,7 @@
             <div class="mb-3">
                 <label class="form-label" for="weight">Weight (lbs): </label>
                 <input class="form-control" type="number" placeholder="Pokemon Weight Here.." name="weight" id="weight"
-                value="<%= pokemon.weight %>" required>
+                    value="<%= pokemon.weight %>" required>
                 <div class="valid-feedback">
                     Looks good!
                 </div>
