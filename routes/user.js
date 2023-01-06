@@ -7,7 +7,10 @@ import { User } from '../models/User.js'
 import { catchAsync } from '../utils/catchAsync.js'
 const Filter = require('bad-words')
 const filter = new Filter()
-import { validateUser } from '../middleware.js'
+import { validateUser, isLoggedIn, isMatchingUser } from '../middleware.js'
+const multer = require('multer')
+import { storage, cloudinary } from '../cloudinary/index.js';
+const upload = multer({ storage })
 
 const words = require('../extra-bad-words.json')
 filter.addWords(...words)
@@ -67,16 +70,34 @@ router.get('/logout', (req, res, next) => {
     })
 })
 
-router.get('/user/:id', async (req, res) => {
+router.get('/user/:id', catchAsync(async (req, res) => {
     const { id } = req.params
     const user = await User.findOne({ _id: id })
     res.render('user/show', { user })
-})
+}))
 
 router.use((err, req, res, next) => {
     const { statusCode = 500, message = 'Something went wrong' } = err
     res.status(statusCode).render('error', { err })
 })
+
+router.get('/user/:id/edit', isLoggedIn, isMatchingUser, catchAsync(async (req, res) => {
+    const { id } = req.params
+    const user = await User.findOne({ _id: id })
+    res.render('user/edit', { user })
+}))
+
+router.patch('/user/:id', isLoggedIn, isMatchingUser, upload.single('image', { timeout: 60000 }, function (error, result) { }), catchAsync(async (req, res) => {
+    const { id } = req.params
+    if (req.file) {
+        const tempUser = await User.findOne({ _id: id })
+        if (tempUser.image.filename) { await cloudinary.uploader.destroy(tempUser.image.filename) }
+        const user = await User.findByIdAndUpdate({ _id: id }, { image: { url: req.file.path, filename: req.file.filename }, bio: req.body.bio })
+    } else {
+        const user = await User.findByIdAndUpdate({ _id: id }, { bio: req.body.bio })
+    }
+    res.redirect(`/user/${id}`)
+}))
 
 const userRoutes = router
 export { userRoutes }

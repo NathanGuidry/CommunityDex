@@ -25,8 +25,8 @@ export const updatePokemonSchema = Joi.object({
 
 export const userSchema = Joi.object({
         email: Joi.string().required(),
-        username: Joi.string().required().max(12),
-        password: Joi.string().required().min(12)
+        username: Joi.string().required().max(15),
+        password: Joi.string().required().min(8)
 })
 
 export const commentSchema = Joi.object({
