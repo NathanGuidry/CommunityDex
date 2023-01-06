@@ -25,11 +25,11 @@ const P = new Pokedex()
 router.get('/', catchAsync(async (req, res) => {
     const { filter, search } = req.query
     const options = {
-        keys: ['name', 'pokedexNum']
+        keys: ['name', 'pokedexNum', 'author.username']
     }
     let pokemon = await P.getPokemonsList()
     const pokemonNames = pokemon.results.slice(0, -numOfSpecialPokemon)
-    const userPokemon = await Pokemon.find({})
+    const userPokemon = await Pokemon.find({}).populate('author')
     pokemon = pokemonNames.concat(userPokemon)
     pokemon.forEach((value, index) => {
         value.pokedexNum = index + 1

@@ -1,2 +1,36 @@
 <%- layout('layouts/boilerplate') %>
-    <h1><%= user.username %>'s Profile</h1>
+    <div class="col">
+        <div class="card mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <% if(!user.image.url) {%>
+                        <img src="../../images/defaultProfilePic.jpg" class="img-fluid rounded-start" alt="">
+                        <% } else {%>
+                            <img src="<%= user.image.url %>" class="img-fluid rounded-start showPfp" alt="">
+                            <% } %>
+                </div>
+                <div class="col">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%=user.username %>
+                        </h5>
+                        <p class="card-text">
+                            <% if(!user.bio) {%>
+                                (This user does not have a bio to show.)
+                                <% } else {%>
+                                    <%= user.bio %>
+                                        <% } %>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-0">
+                <% if(currentUser && user._id.equals(currentUser._id)) {%>
+                    <div class="col-6 offset-1">
+                        <a href="/user/<%= user._id %>/edit"><button class="btn btn-success my-3">Edit
+                                Profile</button></a>
+                    </div>
+                    <% } %>
+            </div>
+        </div>
+    </div>

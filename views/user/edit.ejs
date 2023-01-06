@@ -1,0 +1,31 @@
+<%- layout('layouts/boilerplate') %>
+    <h1>Edit User</h1>
+
+    <div class="col-6 offset-3">
+        <form action="/user/<%= user._id %>?_method=PATCH" method="POST" class="validatedForm" novalidate
+            enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="image" class="form-label">Profile Picture (optional):</label>
+                <input class="form-control" type="file" id="image" name="image" accept=".jpg, .jpeg, .png">
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="description">Bio: </label>
+                <textarea class="form-control" name="bio" id="bio" cols="30" rows="10" placeholder="Add a Bio Here.."
+                    required><%= user.bio %></textarea>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <button class="btn btn-success">Update</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="btn btn-light"><a href="/user/<%= user._id %>">Cancel</a></div>

@@ -1,6 +1,7 @@
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 import { Pokemon } from './models/Pokemon.js'
+import { User } from './models/User.js'
 import Pokedex from 'pokedex-promise-v2'
 const P = new Pokedex()
 import { commentSchema, pokemonSchema, updatePokemonSchema, userSchema } from './schemas.js'
@@ -28,6 +29,16 @@ export const isAuthorized = async (req, res, next) => {
     if (!pokemon.author._id.equals(req.user._id)) {
         req.flash('error', 'You do not have permission to do that')
         return res.redirect(`/pokemon/${id}`)
+    }
+    next()
+}
+
+export const isMatchingUser = async (req, res, next) => {
+    const { id } = req.params
+    const user = await User.findOne({ _id: id })
+    if (!user._id.equals(req.user._id)) {
+        req.flash('error', 'You do not have permission to do that')
+        return res.redirect(`/user/${id}`)
     }
     next()
 }

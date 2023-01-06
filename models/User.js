@@ -9,6 +9,14 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    },
+    image: {
+        url: String,
+        filename: String
+    },
+    bio: {
+        type: String,
+        max: [500, 'Bio is too long']
     }
 })
 
