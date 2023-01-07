@@ -15,8 +15,12 @@ const numOfSpecialPokemon = 249
 const numOfBasePokemon = 905
 
 export const isLoggedIn = (req, res, next) => {
+    const { id } = req.params
     if (!req.isAuthenticated()) {
         req.session.returnTo = req.originalUrl
+        if (req.session.returnTo === (`/pokemon/${id}/like?_method=PUT`)) {
+            req.session.returnTo = `/pokemon/${id}`
+        }
         req.flash('error', 'You must be signed in first!')
         return res.redirect('/login')
     }
@@ -126,4 +130,22 @@ export const englishDesc = async function (id) {
             return species.flavor_text_entries[i].flavor_text
         }
     }
+}
+
+export const likeValidation = async function (req, res, next) {
+    const { id } = req.params
+    if (req.user.likedPokemon.includes(id)) {
+        req.flash('error', 'You have already liked this pokemon')
+        return res.redirect(`/pokemon/${id}`)
+    }
+    next()
+}
+
+export const unlikeValidation = async function (req, res, next) {
+    const { id } = req.params
+    if (!req.user.likedPokemon.includes(id)) {
+        req.flash('error', 'You have not yet liked this pokemon')
+        return res.redirect(`/pokemon/${id}`)
+    }
+    next()
 }
