@@ -59,7 +59,11 @@ const pokemonSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Comment'
         }
-    ]
+    ],
+    likes: {
+        type: Number,
+        min: 0
+    }
 })
 
 pokemonSchema.post('findOneAndDelete', async function (doc) {
