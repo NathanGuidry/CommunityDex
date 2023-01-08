@@ -174,16 +174,16 @@ router.patch('/:id', isLoggedIn, isAuthorized, upload.single('image', { timeout:
 
 router.put('/:id/like', isLoggedIn, likeValidation, catchAsync(async (req, res) => {
     const { id } = req.params
-    await Pokemon.findOneAndUpdate({ pokedexNum: id }, { $inc: { likes: 1 } })
-    const user = await User.findByIdAndUpdate(req.user._id, { $push: { likedPokemon: id } })
+    const pokemon = await Pokemon.findOneAndUpdate({ pokedexNum: id }, { $inc: { likes: 1 } })
+    const user = await User.findByIdAndUpdate(req.user._id, { $push: { likedPokemon: pokemon._id } })
     req.flash('success', 'Pokemon Has Been Liked')
     res.redirect(`/pokemon/${id}`)
 }))
 
 router.put('/:id/unlike', isLoggedIn, unlikeValidation, catchAsync(async (req, res) => {
     const { id } = req.params
-    await Pokemon.findOneAndUpdate({ pokedexNum: id }, { $inc: { likes: -1 } })
-    const user = await User.findByIdAndUpdate(req.user._id, { $unset: { likedPokemon: id } })
+    const pokemon = await Pokemon.findOneAndUpdate({ pokedexNum: id }, { $inc: { likes: -1 } })
+    const user = await User.findByIdAndUpdate(req.user._id, { $unset: { likedPokemon: pokemon._id } })
     req.flash('success', 'Pokemon Like Removed')
     res.redirect(`/pokemon/${id}`)
 }))

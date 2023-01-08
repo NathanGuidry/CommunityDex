@@ -15,6 +15,7 @@
     background-image: url('../images/background.jpeg');
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: top;
     opacity: 0.5;
 }
 

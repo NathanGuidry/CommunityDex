@@ -11,13 +11,14 @@
                     <option value="descending" <%=filter==='descending' ? 'selected' : '' %>>Descending</option>
                     <option value="ascending" <%=filter==='ascending' ? 'selected' : '' %>>Ascending</option>
                     <option value="a-z" <%=filter==='a-z' ? 'selected' : '' %>>A-Z</option>
+                    <option value="most-liked" <%=filter==='most-liked' ? 'selected' : '' %>>Most Popular</option>
                 </select>
                 <button>Sort</button>
             </form>
         </div>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-6 g-4 mb-5">
+    <div class="row row-cols-2 row-cols-lg-6 row-cols-md-4 row-cols-sm-3 g-4 mb-5">
         <% for(let pokemon of userPokemon) {%>
             <div class="col">
                 <div class="card pokemonCard">

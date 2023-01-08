@@ -27,7 +27,7 @@
                 <% } %>
                     <div class="col">
 
-                        <% if(currentUser && currentUser.likedPokemon.includes(id)) {%>
+                        <% if(currentUser && currentUser.likedPokemon.includes(pokemon._id)) {%>
                             <form action="/pokemon/<%= id %>/unlike?_method=PUT" method="POST">
                                 <button>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
