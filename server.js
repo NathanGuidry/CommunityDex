@@ -98,6 +98,9 @@ app.get('/userPokemon', catchAsync(async (req, res) => {
     else if (filter === 'a-z') {
         userPokemon = await Pokemon.find({}).collation({ locale: 'en', strength: 2 }).sort({ name: 1 })
     }
+    else if (filter === 'most-liked') {
+        userPokemon = await Pokemon.find({}).sort({ likes: -1 })
+    }
     res.render('pokemon/userPokemon', { userPokemon, filter })
 }))
 

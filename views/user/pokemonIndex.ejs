@@ -1,0 +1,42 @@
+<%- layout('layouts/boilerplate') %>
+
+    <div class="row">
+        <div class="col">
+            <h1 class="position-relative">
+                <%= user.username %>'s Pokemon
+            </h1>
+        </div>
+        <% if(!pokemon.length) {%>
+            <h2>This user has not made any pokemon</h2>
+            <% } else {%>
+                <div class="col d-flex justify-content-end align-items-center">
+                    <form action="/user/<%= pokemon[0].author._id %>/pokemon">
+                        <label for="filter">Filter By: </label>
+                        <select name="filter" id="filter">
+                            <option value="descending" <%=filter==='descending' ? 'selected' : '' %>>Descending</option>
+                            <option value="ascending" <%=filter==='ascending' ? 'selected' : '' %>>Ascending</option>
+                            <option value="a-z" <%=filter==='a-z' ? 'selected' : '' %>>A-Z</option>
+                            <option value="most-liked" <%=filter==='most-liked' ? 'selected' : '' %>>Most Popular
+                            </option>
+                        </select>
+                        <button>Sort</button>
+                    </form>
+                </div>
+    </div>
+
+    <div class="row row-cols-2 row-cols-lg-6 row-cols-md-4 row-cols-sm-3 g-4 mb-5">
+        <% for(let mon of pokemon) {%>
+            <div class="col">
+                <div class="card pokemonCard">
+                    <a href="/pokemon/<%= mon.pokedexNum %>"><img src="<%= mon.image.url %>" alt=""
+                            class="card-img-top"></a>
+                    <div class="card-body">
+                        <h5 class="card-title"><a href="/pokemon/<%= pokemon.pokedexNum %>">
+                                #<%= mon.pokedexNum %>: <%= mon.name.toUpperCase() %>
+                            </a></h5>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+    </div>
+    <% } %>

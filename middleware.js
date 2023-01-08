@@ -134,7 +134,8 @@ export const englishDesc = async function (id) {
 
 export const likeValidation = async function (req, res, next) {
     const { id } = req.params
-    if (req.user.likedPokemon.includes(id)) {
+    const pokemon = await Pokemon.findOne({ pokedexNum: id })
+    if (req.user.likedPokemon.includes(pokemon._id)) {
         req.flash('error', 'You have already liked this pokemon')
         return res.redirect(`/pokemon/${id}`)
     }
@@ -143,7 +144,8 @@ export const likeValidation = async function (req, res, next) {
 
 export const unlikeValidation = async function (req, res, next) {
     const { id } = req.params
-    if (!req.user.likedPokemon.includes(id)) {
+    const pokemon = await Pokemon.findOne({ pokedexNum: id })
+    if (!req.user.likedPokemon.includes(pokemon._id)) {
         req.flash('error', 'You have not yet liked this pokemon')
         return res.redirect(`/pokemon/${id}`)
     }

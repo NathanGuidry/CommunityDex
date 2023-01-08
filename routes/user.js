@@ -4,6 +4,7 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 import { User } from '../models/User.js'
+import { Pokemon } from "../models/Pokemon.js";
 import { catchAsync } from '../utils/catchAsync.js'
 const Filter = require('bad-words')
 const filter = new Filter()
@@ -74,6 +75,27 @@ router.get('/user/:id', catchAsync(async (req, res) => {
     const { id } = req.params
     const user = await User.findOne({ _id: id })
     res.render('user/show', { user })
+}))
+
+router.get('/user/:id/pokemon', catchAsync(async (req, res) => {
+    const { id } = req.params
+    let pokemon
+    const { filter } = req.query
+    const user = await User.findOne({ _id: id })
+    console.log(user)
+    if (!filter || filter === 'descending') {
+        pokemon = await Pokemon.find({ author: { _id: id } }).sort({ pokedexNum: -1 }).populate('author')
+    }
+    else if (filter === 'ascending') {
+        pokemon = await Pokemon.find({ author: { _id: id } }).populate('author')
+    }
+    else if (filter === 'a-z') {
+        pokemon = await Pokemon.find({ author: { _id: id } }).collation({ locale: 'en', strength: 2 }).sort({ name: 1 }).populate('author')
+    }
+    else if (filter === 'most-liked') {
+        pokemon = await Pokemon.find({ author: { _id: id } }).sort({ likes: -1 }).populate('author')
+    }
+    res.render('user/pokemonIndex', { pokemon, filter, user })
 }))
 
 router.use((err, req, res, next) => {
