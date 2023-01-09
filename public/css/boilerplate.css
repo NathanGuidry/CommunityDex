@@ -19,11 +19,18 @@
     opacity: 0.5;
 }
 
-.inner-bg-image {
+.inner-bg-pokemon-image {
     background-image: url('../images/pokemonShow.png');
     background-repeat: no-repeat;
     background-size: contain;
     color: black;
+}
+
+.inner-bg-user-image {
+    background-image: url('../images/userShow.png');
+    background-repeat: no-repeat;
+    background-size: contain;
+    color: white;
 }
 
 .card-body {
