@@ -18,6 +18,8 @@ const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
 const passport = require('passport')
 const localStrategy = require('passport-local')
+const mongoSanitize = require('express-mongo-sanitize')
+const helmet = require('helmet')
 
 import { Pokemon } from './models/Pokemon.js'
 import { User } from './models/User.js'
@@ -49,6 +51,70 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use(mongoSanitize())
+
+const scriptSrcUrls = [
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://api.mapbox.com/",
+    "https://kit.fontawesome.com/",
+    "https://cdnjs.cloudflare.com/",
+    "https://cdn.jsdelivr.net/",
+    "https://res.cloudinary.com/dsavothdm/",
+    "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"
+];
+const styleSrcUrls = [
+    "https://kit-free.fontawesome.com/",
+    "https://stackpath.bootstrapcdn.com/",
+    "https://api.mapbox.com/",
+    "https://api.tiles.mapbox.com/",
+    "https://fonts.googleapis.com/",
+    "https://use.fontawesome.com/",
+    "https://cdn.jsdelivr.net/",
+    "https://res.cloudinary.com/dsavothdm/",
+    "https://fonts.cdnfonts.com/css/nintendo-ds-bios"
+];
+const connectSrcUrls = [
+    "https://*.tiles.mapbox.com",
+    "https://api.mapbox.com",
+    "https://events.mapbox.com",
+    "https://res.cloudinary.com/dsavothdm/"
+];
+const fontSrcUrls = ["https://res.cloudinary.com/dsavothdm/",
+    "https://fonts.cdnfonts.com/css/nintendo-ds-bios",
+    "https://fonts.cdnfonts.com/s/64809/NintendoDSBIOS.woff",
+    "https://fonts.cdnfonts.com/s/64809/nintendo_NTLGDB_001.woff",
+    "https://fonts.cdnfonts.com/s/64809/super_smash_4_1_by_pokemon_diamondd7zxu6d.woff",
+    "https://fonts.cdnfonts.com/s/64809/nintendo_ext_003.woff",
+    "https://fonts.cdnfonts.com/s/64809/nintendo_ext_LE_003.woff",
+    "https://fonts.cdnfonts.com/s/64809/nintendo_udsgr_std_003.woff"];
+
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: [],
+                connectSrc: ["'self'", ...connectSrcUrls],
+                scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+                styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
+                workerSrc: ["'self'", "blob:"],
+                objectSrc: [],
+                imgSrc: [
+                    "'self'",
+                    "blob:",
+                    "data:",
+                    "https://res.cloudinary.com/dsavothdm/",
+                    "https://images.unsplash.com/",
+                    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/"
+                ],
+                fontSrc: ["'self'", ...fontSrcUrls],
+                mediaSrc: ["https://res.cloudinary.com/dlzez5yga/"],
+                childSrc: ["blob:"]
+            }
+        },
+        crossOriginEmbedderPolicy: false
+    })
+);
 
 const sessionConfig = {
     secret: 'thisshouldbeabettersecret',
