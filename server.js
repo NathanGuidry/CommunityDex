@@ -72,7 +72,8 @@ const styleSrcUrls = [
     "https://use.fontawesome.com/",
     "https://cdn.jsdelivr.net/",
     "https://res.cloudinary.com/dsavothdm/",
-    "https://fonts.cdnfonts.com/css/nintendo-ds-bios"
+    "https://fonts.cdnfonts.com/css/nintendo-ds-bios",
+    "https://fonts.cdnfonts.com/css/pokemon-solid"
 ];
 const connectSrcUrls = [
     "https://*.tiles.mapbox.com",
@@ -87,7 +88,9 @@ const fontSrcUrls = ["https://res.cloudinary.com/dsavothdm/",
     "https://fonts.cdnfonts.com/s/64809/super_smash_4_1_by_pokemon_diamondd7zxu6d.woff",
     "https://fonts.cdnfonts.com/s/64809/nintendo_ext_003.woff",
     "https://fonts.cdnfonts.com/s/64809/nintendo_ext_LE_003.woff",
-    "https://fonts.cdnfonts.com/s/64809/nintendo_udsgr_std_003.woff"];
+    "https://fonts.cdnfonts.com/s/64809/nintendo_udsgr_std_003.woff",
+    "https://fonts.cdnfonts.com/css/pokemon-solid",
+    "https://fonts.cdnfonts.com/s/17890/Pokemon%20Solid.woff"];
 
 app.use(
     helmet({

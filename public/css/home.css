@@ -1,0 +1,125 @@
+h1 {
+    font-family: 'Pokemon Solid', sans-serif;
+    color: #ffcb05;
+    text-shadow: -4px 4px 0 #2a75bb,
+        4px 4px 0 #2a75bb,
+        4px -4px 0 #2a75bb,
+        -4px -4px 0 #2a75bb;
+    font-size: 45px;
+    margin-bottom: 0.85em;
+}
+
+h2 {
+    font-family: 'Pokemon Solid', sans-serif;
+    color: #ffcb05;
+    text-shadow: -3px 3px 0 #2a75bb,
+        3px 3px 0 #2a75bb,
+        3px -3px 0 #2a75bb,
+        -3px -3px 0 #2a75bb;
+    font-size: 25px;
+    margin-bottom: 0.85em;
+    text-decoration: underline;
+}
+
+p {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    color: black;
+    text-shadow: -1px 1px 0 white,
+        1px 1px 0 white,
+        1px -1px 0 white,
+        -1px -1px 0 white;
+    font-size: 25px;
+    letter-spacing: .08rem;
+}
+
+.homenav {
+    font-size: 0.8em;
+    margin-right: 0.5em;
+    margin-left: 0.25em;
+}
+
+::placeholder {
+    font-size: 11px;
+}
+
+@media (max-width: 281px) {
+    .homenav {
+        font-size: 0.6em;
+        margin-right: 0.5em;
+        margin-left: 0.25em;
+    }
+
+    h1 {
+        font-size: 35px;
+    }
+
+    p {
+        font-size: 20px;
+    }
+}
+
+@media (min-width: 576px) {
+    .homenav {
+        font-size: 0.9em;
+        margin-right: 0.5em;
+        margin-left: 0.25em;
+    }
+
+    h1 {
+        font-size: 80px;
+
+    }
+
+    h2 {
+        font-size: 50px;
+    }
+
+    p {
+        font-size: 45px;
+    }
+}
+
+@media (min-width: 768px) {
+    h1 {
+        font-size: 100px;
+
+    }
+
+    h2 {
+        font-size: 50px;
+    }
+
+    p {
+        font-size: 45px;
+    }
+
+    .homenav {
+        font-size: 1em;
+        margin-right: 0.5em;
+        margin-left: 0.25em;
+    }
+}
+
+@media (min-width: 992px) {
+    .homenav {
+        font-size: 1em;
+        margin-right: 0.5em;
+        margin-left: 0.25em;
+    }
+}
+
+@media (min-width: 1200px) {
+    .homenav {
+        font-size: 1em;
+        margin-right: 1em;
+        margin-left: 0.5em;
+    }
+}
+
+@media (min-width: 1400px) {
+    .homenav {
+        font-size: 1.5em;
+        margin-right: 1.5em;
+        margin-left: 1em;
+    }
+}
