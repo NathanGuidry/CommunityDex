@@ -82,7 +82,6 @@ router.get('/user/:id/pokemon', catchAsync(async (req, res) => {
     let pokemon
     const { filter } = req.query
     const user = await User.findOne({ _id: id })
-    console.log(user)
     if (!filter || filter === 'descending') {
         pokemon = await Pokemon.find({ author: { _id: id } }).sort({ pokedexNum: -1 }).populate('author')
     }

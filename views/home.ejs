@@ -1,10 +1,32 @@
 <%- layout('layouts/boilerplate') %>
-    <h1 class="position-relative d-flex justify-content-center">Community Dex</h1>
 
-    <div class="col-6 offset-3 my-3">
+    <link rel="stylesheet" href="../css/home.css">
+
+    <h1 class="position-relative d-flex justify-content-center">CommunityDex</h1>
+
+    <div class="col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 my-5 homecontain">
         <form class="d-flex px-3 form-inline" role="search" action="/pokemon" method="GET">
-            <input class="form-control me-2 form-control" type="search" placeholder="Search for pokemon by pokedex # or name.." aria-label="Search" name=search>
-            <button class="btn btn-success" type="submit">Search</button>
-          </form>
+            <input class="form-control me-2 form-control homesearch" type="search"
+                placeholder="Search for pokemon by pokedex # or name.." aria-label="Search" name=search>
+            <button class="btn btn-warning" type="submit">Search</button>
+        </form>
     </div>
-    
+
+    <div class="d-flex justify-content-evenly offset-sm-1 my-4">
+        <a href="/pokemon"><button class="btn homenav">All Pokemon</button></a>
+        <a href="/userPokemon"><button class="btn homenav">User
+                Pokemon</button></a>
+        <a href="/pokemon/new"><button class="btn homenav">+ Create New
+                Pokemon</button></a>
+    </div>
+
+    <h2 class="text-center mt-5">- Welcome! -</h2>
+
+    <p class="text-center fw-bold mt-5">The CommunityDex is a place where fans of Pokemon can come together
+        to
+        maintain a
+        Pokedex. Users
+        can upload
+        art of their Fakemon and provide all the details that a pokedex would contain! Like and comment on
+        user-created
+        Pokemon to make the world of Pokemon the most diverse it's ever been!</p>

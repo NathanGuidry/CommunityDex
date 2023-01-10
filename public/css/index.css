@@ -1,0 +1,54 @@
+h1 {
+    font-family: 'Pokemon Solid', sans-serif;
+    color: #ffcb05;
+    text-shadow: -4px 4px 0 #2a75bb,
+        4px 4px 0 #2a75bb,
+        4px -4px 0 #2a75bb,
+        -4px -4px 0 #2a75bb;
+    font-size: 45px;
+    margin-bottom: 0.85em;
+    text-decoration: underline;
+}
+
+label {
+    font-family: 'Pokemon Solid', sans-serif;
+    color: #ffcb05;
+    text-shadow: -2px 2px 0 #2a75bb,
+        2px 2px 0 #2a75bb,
+        2px -2px 0 #2a75bb,
+        -2px -2px 0 #2a75bb;
+}
+
+select+button {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    color: white;
+    text-shadow: -1px 1px 0 black,
+        1px 1px 0 black,
+        1px -1px 0 black,
+        -1px -1px 0 black;
+    background-color: #2a75bb;
+    border: 2px solid #ffcb05;
+    letter-spacing: 1px;
+    transition: 0.6s;
+}
+
+select+button:hover {
+    color: black;
+    text-shadow: -1px 1px 0 white,
+        1px 1px 0 white,
+        1px -1px 0 white,
+        -1px -1px 0 white;
+    background-color: #ffcb05;
+    border: 2px solid #2a75bb;
+}
+
+#filter {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    font-size: 25px;
+    color: white;
+    text-shadow: -1.5px 1.5px 0 black,
+        1.5px 1.5px 0 black,
+        1.5px -1.5px 0 black,
+        -1.5px -1.5px 0 black;
+    background-color: #ffcb05;
+}
