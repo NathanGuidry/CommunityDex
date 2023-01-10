@@ -35,7 +35,41 @@
 
 .card-body {
     font-family: 'Nintendo DS BIOS', sans-serif;
-    color: black
+    text-shadow: -1px 1px 0 black,
+        1px 1px 0 black,
+        1px -1px 0 black,
+        -1px -1px 0 black;
+}
+
+.card.pokemonCard {
+    background-color: #2a75bb;
+    border: 10px solid #ffcb05;
+    border-radius: 10%;
+}
+
+.card.pokemonCard:hover {
+    transition: 0.6s;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    background-color: #ffcb05;
+    border: 10px solid #2a75bb;
+}
+
+.navbar-brand {
+    font-family: 'Pokemon Solid', sans-serif;
+    color: #ffcb05;
+    text-shadow: -2px 2px 0 #2a75bb,
+        2px 2px 0 #2a75bb,
+        2px -2px 0 #2a75bb,
+        -2px -2px 0 #2a75bb;
+    margin-bottom: 0.55em;
+}
+
+.navbar-brand:hover {
+    text-decoration: underline;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
 }
 
 .entry-image {
@@ -97,15 +131,12 @@ a {
     color: black;
 }
 
-a:hover {
-    color: black;
+h5>a {
+    color: white;
 }
 
-.card.pokemonCard:hover {
-    transition: 0.75s;
-    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    background-color: red;
-    border: 5px white;
+a:hover {
+    color: black;
 }
 
 .commentPfp {
@@ -117,7 +148,7 @@ a:hover {
     margin-right: 10px;
 }
 
-@media (max-width: 1150px) and (min-width: 986px) {
+@media (max-width: 1163px) and (min-width: 986px) {
     .nav-link {
         font-size: 11px;
     }
