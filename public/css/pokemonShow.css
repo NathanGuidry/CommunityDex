@@ -1,0 +1,62 @@
+main {
+    background-color: #2a75bb;
+    border: 5px solid #ffcb05;
+    border-radius: 3%;
+}
+
+.entry-image {
+    width: 100%;
+    height: 100%;
+    min-height: 617px;
+    max-height: 617px;
+    padding-top: 11em;
+    padding-left: 3em;
+    padding-right: 3em;
+}
+
+.entry-name {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    font-size: 60px;
+    color: white;
+    padding-top: 2em;
+    padding-left: 1.6em;
+}
+
+.entry-types {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    font-size: 60px;
+    padding-top: 0.7em;
+    padding-left: 4.1em;
+}
+
+/* .entry-type1 {
+    padding-right: 1.9em;
+} */
+
+.entry-height {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    font-size: 60px;
+    padding-left: 6.5em;
+    padding-top: 0.65em;
+}
+
+.entry-weight {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    font-size: 60px;
+    padding-left: 6.5em;
+    padding-top: 0.1em;
+}
+
+.entry-description {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    font-size: 40px;
+    padding-left: 3em;
+    padding-top: 2em;
+    padding-right: 2.2em;
+    overflow-wrap: break-word;
+}
+
+.entry-author {
+    font-family: 'Nintendo DS BIOS', sans-serif;
+    font-size: 60px;
+}
