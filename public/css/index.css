@@ -50,5 +50,11 @@ select+button:hover {
         1.5px 1.5px 0 black,
         1.5px -1.5px 0 black,
         -1.5px -1.5px 0 black;
-    background-color: #ffcb05;
+    background-color: #2a75bb;
+    border: 2px solid #ffcb05;
+}
+
+img {
+    min-height: 176px;
+    max-height: 176px;
 }

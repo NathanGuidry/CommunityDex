@@ -1,46 +1,48 @@
 <%- layout('layouts/boilerplate') %>
 
+    <link rel="stylesheet" href="../../css/pokemonShow.css">
+
     <div class="d-flex justify-content-center mb-3">
         <% if (id <=numOfBasePokemon) {%>
-            <button><a href="/pokemon">Back</a></button>
+            <button class="mt-2"><a href="/pokemon">Back</a></button>
     </div>
     <% if(id !=1){ %>
         <div class="d-flex justify-content-between mb-3">
-            <button><a href="/pokemon/<%= id - 1 %>"><-- Previous</a></button>
-            <button><a href="/pokemon/<%= parseInt(id) + 1 %>">Next --></a></button>
+            <button class="menuButton"><a href="/pokemon/<%= id - 1 %>"><-- Previous</a></button>
+            <button class="menuButton"><a href="/pokemon/<%= parseInt(id) + 1 %>">Next --></a></button>
             <% } else {%>
                 <div class="d-flex justify-content-end mb-3">
-                    <button><a href="/pokemon/<%= parseInt(id) + 1 %>">Next --></a></button>
+                    <button class="menuButton"><a href="/pokemon/<%= parseInt(id) + 1 %>">Next --></a></button>
                     <% } %>
                 </div>
                 <% } else {%>
-                    <button><a href="/userPokemon">Back</a></button>
+                    <button class="menuButton mt-2"><a href="/userPokemon">Back</a></button>
         </div>
         <div class="d-flex justify-content-between mb-3">
             <div class="col">
-                <button><a href="/pokemon/<%= id - 1 %>"><-- Previous</a></button>
+                <button class="menuButton"><a href="/pokemon/<%= id - 1 %>"><-- Previous</a></button>
             </div>
             <% if(currentUser && pokemon.author.equals(currentUser._id)) {%>
                 <div class="col">
-                    <button><a href="/pokemon/<%= id %>/edit">Edit</a></button>
+                    <button class="menuButton"><a href="/pokemon/<%= id %>/edit">Edit</a></button>
                 </div>
                 <% } %>
-                    <div class="col">
+                    <div class="col <%= id == maxId ? 'me-5' : '' %>">
 
                         <% if(currentUser && currentUser.likedPokemon.includes(pokemon._id)) {%>
                             <form action="/pokemon/<%= id %>/unlike?_method=PUT" method="POST">
-                                <button>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                        class="bi bi-heart-fill" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd"
-                                            d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
+                                <button class="menuButton <%= id != maxId ? 'ms-3' : ''%>"">
+                                    <svg xmlns=" http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" />
                                     </svg>
                                     <%= pokemon.likes %>
                                 </button>
                             </form>
                             <% } else {%>
                                 <form action="/pokemon/<%= id %>/like?_method=PUT" method="POST">
-                                    <button>
+                                    <button class="menuButton <%= id != maxId ? 'ms-3' : ''%>">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                             fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
                                             <path
@@ -54,12 +56,13 @@
                     <% if(currentUser && pokemon.author.equals(currentUser._id)) {%>
                         <div class="col">
                             <form action="/pokemon/<%= id %>?_method=DELETE" method="POST" class="d-inline">
-                                <button>Delete</button>
+                                <button class="menuButton">Delete</button>
                             </form>
                         </div>
                         <% } %>
                             <% if(id !=maxId){ %>
-                                <button><a href="/pokemon/<%= parseInt(id) + 1 %>">Next --></a></button>
+                                <button class="menuButton"><a href="/pokemon/<%= parseInt(id) + 1 %>">Next
+                                        --></a></button>
                                 <% } %>
         </div>
         <% } %>
@@ -81,7 +84,7 @@
                                         #<%= id %>
                                             <%= pokemon.name.toUpperCase() %>
                                     </h1>
-                                    <h2 class="author">BY:
+                                    <h2 class="author entry-author">BY:
                                         <% if(id> numOfBasePokemon) {%>
                                             <a href="/user/<%= pokemon.author._id %>">
                                                 <%= pokemon.author.username %>
@@ -90,24 +93,24 @@
                                                 GAMEFREAK
                                                 <% } %>
                                     </h2>
-                                    <h2 class="entry-types">
+                                    <h2 class="entry-types row justify-content-between">
                                         <% if(id <=numOfBasePokemon){ %>
-                                            <span class="entry-type1">
+                                            <div class="entry-type1 col">
                                                 <%= pokemon.types[0].type.name.toUpperCase() %>
-                                            </span>
+                                            </div>
                                             <% if(pokemon.types[1]){ %>
-                                                <span class="entry-type2">
+                                                <div class="entry-type2 col">
                                                     <%= pokemon.types[1].type.name.toUpperCase() %>
-                                                </span>
+                                                </div>
                                                 <% } %>
                                                     <% } else { %>
-                                                        <span class="entry-type1">
+                                                        <div class="entry-type1 col">
                                                             <%= pokemon.type1.toUpperCase() %>
-                                                        </span>
+                                                        </div>
                                                         <% if(pokemon.type2){ %>
-                                                            <span class="entry-type2">
+                                                            <div class="entry-type2 col">
                                                                 <%= pokemon.type2.toUpperCase() %>
-                                                            </span>
+                                                            </div>
                                                             <% } %>
                                                                 <% } %>
 
