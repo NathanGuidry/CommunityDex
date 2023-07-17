@@ -13,8 +13,8 @@ const multer = require('multer')
 import { storage, cloudinary } from '../cloudinary/index.js';
 const upload = multer({ storage })
 
-const numOfSpecialPokemon = 249
-const numOfBasePokemon = 905
+const numOfSpecialPokemon = 271 //271
+const numOfBasePokemon = 1010 //1010
 
 const words = require('../extra-bad-words.json')
 filter.addWords(...words)
