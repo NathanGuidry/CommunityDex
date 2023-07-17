@@ -153,40 +153,42 @@
                                 <button class="btn btn-success mt-3">Create</button>
                             </form>
                         </div>
-                        <% } %>
-                            <% if(pokemon.comments.length) {%>
-                                <% for(let comment of pokemon.comments.reverse()) {%>
-                                    <div class="card my-5">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item fw-bold fs-5"><a
-                                                    href="/user/<%= comment.author._id %>">
-                                                    <% if(!comment.author.image.url) {%>
-                                                        <img src="../../images/defaultProfilePic.jpg" alt=""
-                                                            class="d-inline commentPfp">
-                                                        <% } else {%>
-                                                            <img src="<%= comment.author.image.url %>" alt=""
+                        <% } else { %>
+                            <h2>Sign up to comment!</h2>
+                            <% } %>
+                                <% if(pokemon.comments.length) {%>
+                                    <% for(let comment of pokemon.comments.reverse()) {%>
+                                        <div class="card my-5">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item fw-bold fs-5"><a
+                                                        href="/user/<%= comment.author._id %>">
+                                                        <% if(!comment.author.image.url) {%>
+                                                            <img src="../../images/defaultProfilePic.jpg" alt=""
                                                                 class="d-inline commentPfp">
-                                                            <% } %>
-                                                                <%= comment.author.username %>
-                                                </a>
-                                            </li>
-                                            <li class="list-group-item">
-                                                <%= comment.body %>
-                                            </li>
-                                            <% if(currentUser && comment.author._id.equals(currentUser._id)) {%>
-                                                <li class="list-group-item">
-                                                    <form
-                                                        action="/pokemon/<%= id %>/comments/<%= comment._id %>?_method=DELETE"
-                                                        method="POST">
-                                                        <button class="btn btn-danger">Delete</button>
-                                                    </form>
+                                                            <% } else {%>
+                                                                <img src="<%= comment.author.image.url %>" alt=""
+                                                                    class="d-inline commentPfp">
+                                                                <% } %>
+                                                                    <%= comment.author.username %>
+                                                    </a>
                                                 </li>
+                                                <li class="list-group-item">
+                                                    <%= comment.body %>
+                                                </li>
+                                                <% if(currentUser && comment.author._id.equals(currentUser._id)) {%>
+                                                    <li class="list-group-item">
+                                                        <form
+                                                            action="/pokemon/<%= id %>/comments/<%= comment._id %>?_method=DELETE"
+                                                            method="POST">
+                                                            <button class="btn btn-danger">Delete</button>
+                                                        </form>
+                                                    </li>
+                                                    <% } %>
+                                            </ul>
+                                        </div>
+                                        <% } %>
+                                            <% } else {%>
+                                                <h3 class="text-center mb-5">No Comments to Show</h3>
                                                 <% } %>
-                                        </ul>
-                                    </div>
-                                    <% } %>
-                                        <% } else {%>
-                                            <h3 class="text-center mb-5">No Comments to Show</h3>
-                                            <% } %>
-                                                <% } %>
+                                                    <% } %>
                 </div>
